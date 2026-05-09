@@ -1,0 +1,246 @@
+/* Resetare de bază */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    padding: 20px;
+    margin: 0;
+}
+
+/* Stil pentru antet și filtre */
+header,
+#filters {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+/* Grila cu plante */
+.plants-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Designul pentru o singură plantă (Card) */
+.plant-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 220px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s;
+    /* Efect de mărire la hover */
+}
+
+.plant-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Stilul pentru poza plantei */
+.plant-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    /* Taie poza frumos ca să încapă în pătrat */
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* Butonul de detalii */
+button {
+    background-color: #2e7d32;
+    /* Verde natural */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #1b5e20;
+}
+
+/* --- Stiluri specifice pentru pagina de Detalii (plant_details.php) --- */
+
+/* Containerul principal al detaliilor */
+#plantDetails {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    max-width: 800px;
+    margin: 0 auto;
+    /* Centrează pe ecran */
+}
+
+/* Butonul de înapoi */
+.back-button {
+    display: inline-block;
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 20px;
+    transition: color 0.3s;
+}
+
+.back-button:hover {
+    color: #1b5e20;
+    text-decoration: underline;
+}
+
+/* Titlurile */
+#plantDetails h2 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+#plantDetails h3 {
+    font-size: 1.5em;
+    color: #2e7d32;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+/* Stilizarea imaginii mari */
+.plant-detail-image-container {
+    width: 100%;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    /* Asigură că marginile rotunde taie colțurile pozei */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.plant-image-large {
+    width: 100%;
+    height: 400px;
+    /* Înălțime fixă pentru consistență */
+    object-fit: cover;
+    /* Taie poza proporțional pentru a umple spațiul */
+    display: block;
+}
+
+/* Paragrafele de text */
+#plantDetails p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+#plantDetails p strong {
+    color: #333;
+}
+
+/* Cutia cu caracteristici (Am mutat stilul din HTML direct în CSS) */
+.plant-characteristics {
+    margin: 30px 0;
+    background: #f4f9f4;
+    /* Un verde foarte deschis */
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid #2e7d32;
+}
+
+.plant-characteristics h4 {
+    margin-top: 0;
+    color: #2e7d32;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+/* Stilul pentru etichetele din listă */
+.char-badge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+/* --- Stilizare Header și Navigație --- */
+
+/* Transformăm header-ul într-un container Flexbox */
+header {
+    display: flex;
+    justify-content: space-between;
+    /* Pune spațiu maxim între elementul din stânga (h1) și cel din dreapta (nav) */
+    align-items: center;
+    /* Le aliniază perfect pe verticală */
+}
+
+/* Scoatem marginile implicite ale titlului ca să stea perfect centrat */
+header h1 {
+    margin: 0;
+    color: #2e7d32;
+    font-size: 1.8em;
+}
+
+/* Aliniem elementele din meniu pe același rând, cu spațiu între ele */
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* Spațiul dintre textul de salut și butoane */
+}
+
+/* Textul de "Salut, Utilizator!" */
+header nav span {
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+}
+
+/* Stilizarea generală a link-urilor pentru a arăta ca niște butoane */
+header nav a {
+    text-decoration: none;
+    /* Scoatem sublinierea clasică albastră */
+    padding: 8px 18px;
+    border-radius: 25px;
+    /* Le facem rotunde la capete */
+    font-weight: bold;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    /* Animație fină la hover */
+}
+
+/* Butonul "Adaugă Plantă" (Verde) */
+header nav a[href="add_plant.php"] {
+    background-color: #2e7d32;
+    color: white;
+    border: 2px solid #2e7d32;
+}
+
+header nav a[href="add_plant.php"]:hover {
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+    transform: translateY(-2px);
+    /* Se ridică puțin când pui mouse-ul */
+}
+
+/* Butonul "Logout" (Roșu/Inversat) */
+header nav a[href="api/logout.php"] {
+    background-color: transparent;
+    color: #d32f2f;
+    border: 2px solid #d32f2f;
+}
+
+header nav a[href="api/logout.php"]:hover {
+    background-color: #d32f2f;
+    color: white;
+    transform: translateY(-2px);
+}
