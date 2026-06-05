@@ -1,0 +1,84 @@
+/* Resetare de bază și stilizarea paginii */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    /* Centrează tot conținutul */
+    background-color: #f4f9f4;
+    /* Un fundal foarte subtil, verde deschis */
+    color: #333;
+    padding-top: 15vh;
+    /* Coboară conținutul puțin mai jos pe ecran */
+    margin: 0;
+}
+
+h1 {
+    color: #2c5e3b;
+    /* Un verde închis, elegant, pentru titlu */
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+p {
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+    /* Centrează paragraful și lasă spațiu jos */
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Containerul pentru butoane */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    /* Spațiu între butoane */
+}
+
+/* Stilul de bază pentru ambele butoane */
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    /* Elimină linia de subliniere a link-ului */
+    padding: 12px 30px;
+    border-radius: 8px;
+    /* Colțuri ușor rotunjite */
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    /* Face o trecere fină la animația de hover */
+}
+
+/* Stilizare specifică pentru butonul principal (Login) */
+.btn-primary {
+    background-color: #2e7d32;
+    /* Verde aprins, atrăgător */
+    color: white;
+    border: 2px solid #2e7d32;
+}
+
+.btn-primary:hover {
+    background-color: #1b5e20;
+    /* Verde mai închis la hover */
+    border-color: #1b5e20;
+    transform: translateY(-3px);
+    /* Butonul se ridică ușor când pui mouse-ul */
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+    /* Adaugă o umbră verde */
+}
+
+/* Stilizare specifică pentru butonul secundar (Register) */
+.btn-secondary {
+    background-color: transparent;
+    /* Fundal transparent */
+    color: #2e7d32;
+    /* Text verde */
+    border: 2px solid #2e7d32;
+    /* Contur verde */
+}
+
+.btn-secondary:hover {
+    background-color: #e8f5e9;
+    /* Un fundal verde foarte pal la hover */
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
+}
