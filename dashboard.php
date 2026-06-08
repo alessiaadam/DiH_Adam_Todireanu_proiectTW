@@ -56,7 +56,7 @@ if (!isset($_SESSION['user_id'])) {
         </section>
     </main>
 
-    <script src="js/dashboard.js"></script>
+    <script src="js/dashboard.js?v=2"></script>
 </body>
 
 </html>
