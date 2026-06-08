@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 require_once '../database/database.php';
 header('Content-Type: application/json');
 
@@ -25,9 +26,14 @@ if (!empty($search)) {
 try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-    $plants = $stmt->fetchAll();
-
-    echo json_encode($plants);
+    $plants = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    echo json_encode([
+        "current_user_id" => $_SESSION['user_id'] ?? null,
+        "current_user_role" => $_SESSION['user_role'] ?? 'user',
+        "plants" => $plants
+    ]);
+    
 } catch (Exception $e) {
     echo json_encode(["error" => $e->getMessage()]);
 }
+?>

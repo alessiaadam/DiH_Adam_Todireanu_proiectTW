@@ -13,22 +13,34 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 plantsContainer.innerHTML = '';
 
-                if (data.length === 0) {
+                const plantsList = data.plants;
+                const currentUserId = data.current_user_id;
+                const currentUserRole = data.current_user_role;
+
+                if (!plantsList || plantsList.length === 0) {
                     plantsContainer.innerHTML = '<p>Nu am găsit nicio plantă.</p>';
                     return;
                 }
 
-                data.forEach(plant => {
+                plantsList.forEach(plant => {
                     const card = document.createElement('div');
                     card.className = 'plant-card';
                     const imagePath = plant.file_path ? plant.file_path : 'https://placehold.co/400x300/e0e0e0/666666?text=Fara+Poza';
+
+                    let actionButtons = '';
+                    if (plant.user_id == currentUserId || currentUserRole === 'admin') {
+                        actionButtons = `
+                            <button onclick="editPlant(${plant.id})" style="background-color: #f57c00; margin-top: 5px;">Editează</button>
+                            <button onclick="deletePlant(${plant.id})" style="background-color: #d32f2f; margin-top: 5px;">Șterge</button>
+                        `;
+                    }
 
                     card.innerHTML = `
                         <img src="${imagePath}" alt="${plant.common_name}" class="plant-image">
                         <h4>${plant.common_name}</h4>
                         <p><i>${plant.scientific_name}</i></p>
                         <button onclick="viewDetails(${plant.id})">Vezi Detalii</button>
-                        <button onclick="deletePlant(${plant.id})" style="background-color: #d32f2f; margin-top: 5px;">Șterge</button>
+                        ${actionButtons}
                     `;
 
                     plantsContainer.appendChild(card);
@@ -36,12 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error('Eroare:', error));
     }
+    
     loadPlants();
     btnSearch.addEventListener('click', loadPlants);
 
     window.deletePlant = function (plantId) {
         if (confirm("Ești sigur că vrei să ștergi această plantă?")) {
-
             fetch('api/delete_plant.php', {
                 method: 'POST',
                 headers: {
@@ -51,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
+                    if (data.status === 'success') {
                         alert("Planta a fost ștearsă cu succes!");
                         document.getElementById('btnSearch').click();
                     } else {
@@ -65,5 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.viewDetails = function (plantId) {
         const url = `plant_details.php?id=${plantId}`;
         window.location.href = url;
+    }
+
+    window.editPlant = function (plantId) {
+        window.location.href = `edit_plant.php?id=${plantId}`;
     }
 });
