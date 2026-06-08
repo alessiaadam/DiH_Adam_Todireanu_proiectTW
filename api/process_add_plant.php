@@ -1,6 +1,7 @@
 <?php
 require_once 'check_auth.php';
 require_once '../database/database.php';
+header('Content-Type: application/json; charset=utf-8');
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     $common_name=$_POST['common_name'];
     $scientific_name=$_POST['scientific_name'];
@@ -32,13 +33,23 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 $stmt_char->execute([$plant_id, $char_id]);
             }
         }
-        echo "<h3>Planta a fost adăugată cu succes în Ierbar!</h3>";
-        echo "<a href='../add_plant.php'>Adaugă altă plantă</a>";
+        echo json_encode([
+            "status" => "success",
+            "message" => "Planta a fost salvată cu succes!"
+        ]);
+        exit();
     }catch(\PDOException $e){
-        echo "Eroare la baza de date: " . $e->getMessage();
+        echo json_encode([
+            "status" => "error",
+            "message" => "Eroare la adăugarea plantei: " . $e->getMessage()
+        ]);
+        exit();
     } 
 }else{
-    header("Location: ../add_plant.php");
+   echo json_encode([
+        "status" => "error",
+        "message" => "Metodă nepermisă."
+    ]);
     exit();
 }
 ?>

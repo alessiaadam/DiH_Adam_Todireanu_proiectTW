@@ -1,6 +1,7 @@
 <?php
     require_once 'check_auth.php';
     require_once '../database/database.php';
+    header('Content-Type: application/json; charset=utf-8');
     if($_SERVER["REQUEST_METHOD"]=="POST" && isset($_POST['plant_id'])){
         $plant_id=$_POST['plant_id'];
         try{
@@ -12,13 +13,23 @@
             }
             $stmt_delete=$pdo->prepare("DELETE FROM plants WHERE id=?");
             $stmt_delete->execute([$plant_id]);
-            header("Location: ../admin_dashboard.php");
+            echo json_encode([
+            "status" => "success", 
+            "message" => "Planta a fost ștearsă cu succes!"
+        ]);
             exit();
         }catch(\PDOException $exception){
-            die("Eroare la stergerea plantei: ".  exception->getMessage());
+            echo json_encode([
+            "status" => "error", 
+            "message" => "Eroare la ștergere: " . $exception->getMessage()
+        ]);
+        exit();
         }
     }else{
-        header("Location: ../admin_dashboard.php");
-        exit();
+        echo json_encode([
+        "status" => "error", 
+        "message" => "Cerere invalidă!"
+    ]);
+    exit();
     }
 ?>
