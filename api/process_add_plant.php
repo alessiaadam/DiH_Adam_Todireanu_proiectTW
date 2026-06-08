@@ -7,13 +7,14 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     $scientific_name=$_POST['scientific_name'];
     $description=$_POST['description'];
     $origin=$_POST['origin'];
+    $soil=$_POST['soil'] ?? null;
     $status=$_POST['status'];
     $propagation_method=$_POST['propagation_method'];
     $user_id=$_SESSION['user_id'];
     try{
-        $sql_plant="INSERT INTO `plants` (`user_id`, `common_name`, `scientific_name`, `description`, `origin`, `status`, `propagation_method`) VALUES (?,?,?,?,?,?,?)";
+        $sql_plant="INSERT INTO `plants` (`user_id`, `common_name`, `scientific_name`, `description`, `origin`, `soil`, `status`, `propagation_method`) VALUES (?,?,?,?,?,?,?,?)";
         $stmt_plant=$pdo->prepare($sql_plant);
-        $stmt_plant->execute([$user_id, $common_name, $scientific_name, $description, $origin, $status, $propagation_method]);
+        $stmt_plant->execute([$user_id, $common_name, $scientific_name, $description, $origin, $soil, $status, $propagation_method]);
         $plant_id=$pdo->lastInsertId();
         if(isset($_FILES['plant_image']) && $_FILES['plant_image']['error']==0){
             $file_name=time()."_".basename($_FILES["plant_image"]["name"]);
