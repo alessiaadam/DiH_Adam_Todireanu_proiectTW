@@ -1,32 +1,33 @@
 <?php
+header('Content-Type: application/json');
 require_once '../database/database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     try {
         $sql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'user')";
         $stmt = $pdo->prepare($sql);
-        
+
         $stmt->execute([$username, $email, $hashed_password]);
 
-        echo "<h3>Cont creat cu succes!</h3>";
-        echo "<a href='../login.html'>Mergi la pagina de Login</a>";
-
+        echo json_encode(["status" => "success", "message" => "Cont creat cu succes!"]);
+        exit();
     } catch (\PDOException $e) {
         if ($e->getCode() == 23000) {
-            echo "<h3>Eroare: Acest email este deja folosit!</h3>";
-            echo "<a href='../register.html'>Încearcă din nou</a>";
+            echo json_encode(["status" => "error", "message" => "Acest email este deja folosit!"]);
+            exit();
         } else {
-            echo "A apărut o eroare: " . $e->getMessage();
+            echo json_encode(["status" => "error", "message" => "A apărut o eroare: " . $e->getMessage()]);
+            exit();
         }
     }
 } else {
-    header("Location: ../register.html");
+    echo json_encode(["status" => "error", "message" => "Metoda de cerere nu este suportată!"]);
     exit();
 }
 ?>

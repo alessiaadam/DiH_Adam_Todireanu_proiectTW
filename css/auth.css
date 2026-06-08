@@ -1,0 +1,101 @@
+/* css/auth.css */
+body {
+    font-family: Arial, sans-serif;
+    padding: 50px;
+    background-color: #f4f9f4;
+    /* Păstrăm fundalul subtil verde */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    /* Centrează formularul pe verticală */
+}
+
+.form-container {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    /* Umbră subtilă ca la detalii plante */
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+}
+
+.form-container h2 {
+    color: #2e7d32;
+    /* Verdele închis elegant folosit la h1 */
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.form-container label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    /* Asigură că padding-ul nu strică lățimea de 100% */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+.form-container input:focus {
+    outline: none;
+    border-color: #2e7d32;
+    /* Border verde la focus */
+}
+
+.form-container button[type="submit"],
+.form-container input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #2e7d32;
+    /* Verdele butonului principal */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.form-container button[type="submit"]:hover,
+.form-container input[type="submit"]:hover {
+    background-color: #1b5e20;
+    /* Hover mai închis */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+}
+
+.form-container p {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.form-container a {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.form-container a:hover {
+    color: #1b5e20;
+    text-decoration: underline;
+}

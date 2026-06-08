@@ -50,6 +50,37 @@
         </form>
     </div>
 
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('api/register_action.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Eroare de rețea sau de server.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        window.location.href = 'login.html';
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Eroare Fetch:', error);
+                    alert('A apărut o problemă la comunicarea cu serverul.');
+                });
+        });
+    </script>
+
 </body>
 
 </html>
