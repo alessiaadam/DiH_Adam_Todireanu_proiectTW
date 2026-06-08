@@ -17,6 +17,10 @@ if (!empty($origin)) {
     $sql .= " AND origin = ?";
     $params[] = $origin;
 }
+if (!empty($soil)) {
+    $sql .= " AND soil = ?";
+    $params[] = $soil;
+}
 if (!empty($search)) {
     $sql .= " AND (common_name LIKE ? OR scientific_name LIKE ?)";
     $params[] = "%$search%";

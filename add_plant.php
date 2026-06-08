@@ -26,6 +26,15 @@ require_once 'api/check_auth.php';
         <label for="origin">Origine:</label>
         <input type="text" id="origin" name="origin" placeholder="ex. Europa">
 
+        <label for="soil">Tip sol preferat:</label>
+        <select id="soil" name="soil">
+            <option value="">Orice tip de sol</option>
+            <option value="nisipos">Nisipos</option>
+            <option value="argilos">Argilos</option>
+            <option value="lutos">Lutos</option>
+            <option value="bogat">Bogat</option>
+        </select>
+
         <label for="status">Statut:</label>
         <select id="status" name="status" required>
             <option value="" disabled selected>-- Alege statutul --</option>
