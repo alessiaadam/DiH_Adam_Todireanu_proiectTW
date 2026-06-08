@@ -7,23 +7,13 @@ require_once 'api/check_auth.php';
 <head>
     <meta charset="UTF-8">
     <title>Adaugă o Plantă - Ierbar Virtual</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
-        .form-container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input[type="text"], textarea, select, input[type="file"] { width: 100%; padding: 10px; margin: 8px 0 20px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        .checkbox-group { margin-bottom: 20px; }
-        .checkbox-group label { display: inline-block; margin-right: 15px; cursor: pointer; }
-        button { background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
-        button:hover { background-color: #45a049; }
-        h2 { text-align: center; color: #333; }
-    </style>
+    <link rel="stylesheet" href="css/add_plant.css">
 </head>
 <body>
-
+    
 <div class="form-container">
     <h2>Adaugă o Plantă în Ierbar</h2>
-    <form action="api/process_add_plant.php" method="POST" enctype="multipart/form-data">
-        
+    <form id="addPlantForm">    
         <label for="common_name">Denumire Populară:</label>
         <input type="text" id="common_name" name="common_name" required placeholder="ex. Trandafir">
 
@@ -89,6 +79,28 @@ require_once 'api/check_auth.php';
         <button type="submit">Salvează Planta</button>
     </form>
 </div>
-
+<script>
+document.getElementById('addPlantForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    fetch('api/process_add_plant.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            alert(data.message);
+            window.location.href = 'dashboard.php'; 
+        } else {
+            alert('A apărut o eroare: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Eroare de rețea:', error);
+        alert('Eroare de conexiune la server.');
+    });
+});
+</script>
 </body>
 </html>
