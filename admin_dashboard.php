@@ -22,6 +22,7 @@ require_once 'api/fetch_admin_data.php';
     <div class="container">
         <h1>Panou de Administrare</h1>
         <div class="toolbar">
+            <a href="dashboard.php" class="btn btn-green"">Înapoi la Dashboard</a>
             <a href="add_plant.php" class="btn btn-green">+ Adaugă plantă</a>
 
             <form id="formExport" action="api/export_plants_json.php" method="GET" class="action-form">
@@ -93,23 +94,15 @@ require_once 'api/fetch_admin_data.php';
 
     <script>
         document.getElementById('formImport').addEventListener('submit', function (e) {
-            // 1. Oprim reîncărcarea paginii
             e.preventDefault();
-
             const fileInput = document.getElementById('importFile');
             const importType = document.getElementById('importType').value;
-
-            // 2. Pregătim datele pentru trimitere (inclusiv fișierul)
             const formData = new FormData();
             formData.append('import_file', fileInput.files[0]);
-
-            // 3. Stabilim către ce script PHP trimitem datele
             let endpoint = '';
             if (importType === 'csv') endpoint = 'api/import_plants_csv.php';
             if (importType === 'json') endpoint = 'api/import_plants_json.php';
             if (importType === 'xml') endpoint = 'api/import_plants_xml.php';
-
-            // 4. Trimitem cererea asincronă
             fetch(endpoint, {
                 method: 'POST',
                 body: formData
@@ -123,7 +116,6 @@ require_once 'api/fetch_admin_data.php';
                 .then(data => {
                     if (data.status === 'success') {
                         alert('Succes: ' + data.message);
-                        // Reîncărcăm pagina ca să vezi imediat noile plante în tabel
                         window.location.reload();
                     } else {
                         alert('Eroare: ' + data.message);
