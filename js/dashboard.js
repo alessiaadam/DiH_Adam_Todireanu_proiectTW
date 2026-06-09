@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (plant.user_id == currentUserId || currentUserRole === 'admin') {
                         actionButtons = `
-                            <button onclick="editPlant(${plant.id})" style="background-color: #2e7d32; margin-top: 5px;">Editează</button>
+                            <button onclick="editPlant(${plant.id})" style="margin-top: 5px;">Editează</button>
                             <button onclick="deletePlant(${plant.id})" style="background-color: #d32f2f; margin-top: 5px;">Șterge</button>
                         `;
                     }
@@ -118,5 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.viewDetails = function (plantId) {
         const url = `plant_details.php?id=${plantId}`;
         window.location.href = url;
+    }
+     window.editPlant = function (plantId) {
+        window.location.href = `edit_plant.php?id=${plantId}`;
     }
 });
