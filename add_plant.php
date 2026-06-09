@@ -63,19 +63,19 @@ try {
                 style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
 
                 <h4 style="margin-top: 0; color: #4CAF50;">Necesarul de Lumină</h4>
-                <label><input type="radio" name="characteristics[]" value="1"> Iubitoare de soare</label><br>
-                <label><input type="radio" name="characteristics[]" value="2"> Semiumbră</label><br>
-                <label><input type="radio" name="characteristics[]" value="3"> Iubitoare de umbră</label>
+                <label><input type="radio" name="light[]" value="1"> Iubitoare de soare</label><br>
+                <label><input type="radio" name="light[]" value="2"> Semiumbră</label><br>
+                <label><input type="radio" name="light[]" value="3"> Iubitoare de umbră</label>
 
                 <h4 style="color: #4CAF50;"> Necesarul de Apă</h4>
-                <label><input type="radio" name="characteristics[]" value="4"> Rezistentă la secetă</label><br>
-                <label><input type="radio" name="characteristics[]" value="18"> Moderat</label><br>
-                <label><input type="radio" name="characteristics[]" value="5"> Iubitoare de umezeală</label><br>
-                <label><input type="radio" name="characteristics[]" value="6"> Plantă acvatică</label>
+                <label><input type="radio" name="water[]" value="4"> Rezistentă la secetă</label><br>
+                <label><input type="radio" name="water[]" value="18"> Moderat</label><br>
+                <label><input type="radio" name="water[]" value="5"> Iubitoare de umezeală</label><br>
+                <label><input type="radio" name="water[]" value="6"> Plantă acvatică</label>
 
                 <h4 style="color: #4CAF50;">Ciclul de Viață</h4>
-                <label><input type="radio" name="characteristics[]" value="7"> Anuală</label><br>
-                <label><input type="radio" name="characteristics[]" value="8"> Perenă</label>
+                <label><input type="radio" name="lifecycle[]" value="7"> Anuală</label><br>
+                <label><input type="radio" name="lifecycle[]" value="8"> Perenă</label>
 
                 <h4 style="color: #4CAF50;">Proprietăți și Utilizări</h4>
                 <label><input type="checkbox" name="characteristics[]" value="9"> Medicinală</label><br>
@@ -86,16 +86,18 @@ try {
                 <label><input type="checkbox" name="characteristics[]" value="14"> Purifică aerul</label>
 
                 <h4 style="color: #4CAF50;">Tipul de creștere</h4>
-                <label><input type="radio" name="characteristics[]" value="19"> Arbust</label><br>
-                <label><input type="radio" name="characteristics[]" value="15"> Cățărătoare / Liană</label><br>
-                <label><input type="radio" name="characteristics[]" value="16"> Târâtoare</label><br>
-                <label><input type="radio" name="characteristics[]" value="17"> Suculentă</label>
+                <label><input type="radio" name="growth[]" value="19"> Arbust</label><br>
+                <label><input type="radio" name="growth[]" value="15"> Cățărătoare / Liană</label><br>
+                <label><input type="radio" name="growth[]" value="16"> Târâtoare</label><br>
+                <label><input type="radio" name="growth[]" value="17"> Suculentă</label>
 
             </div>
             <label for="related_species"><b>Specii Înrudite (opțional):</b> <br>
-                <small style="color: #666; font-weight: normal;">Ține apăsat CTRL (sau CMD pe Mac) pentru a selecta mai multe.</small>
+                <small style="color: #666; font-weight: normal;">Ține apăsat CTRL (sau CMD pe Mac) pentru a selecta mai
+                    multe.</small>
             </label>
-            <select id="related_species" name="related_species[]" multiple style="height: 120px; width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; padding: 5px;">
+            <select id="related_species" name="related_species[]" multiple
+                style="height: 120px; width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; padding: 5px;">
                 <?php foreach ($all_plants as $p): ?>
                     <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['common_name']) ?></option>
                 <?php endforeach; ?>
@@ -110,6 +112,14 @@ try {
         document.getElementById('addPlantForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const formData = new FormData(this);
+
+            ['light', 'water', 'lifecycle', 'growth'].forEach(groupName => {
+                const selected = this.querySelector(`input[name="${groupName}"]:checked`);
+                if (selected) {
+                    formData.append('characteristics[]', selected.value);
+                }
+            });
+
             fetch('api/process_add_plant.php', {
                 method: 'POST',
                 body: formData
