@@ -13,7 +13,7 @@ try {
     header('Content-Type: text/xml; charset=utf-8');
     header('Content-Disposition: attachment; filename="export_plante_' . date('Y-m-d') . '.xml"');
     $xml = new SimpleXMLElement('<ierbar/>');
-    
+
     foreach ($plants as $plant) {
         $plantNode = $xml->addChild('planta');
         foreach ($plant as $key => $value) {
