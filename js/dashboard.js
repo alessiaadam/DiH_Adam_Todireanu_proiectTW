@@ -83,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Daca utilizatorul curent este proprietarul plantei sau are rol de admin, afisam butoanele de editare si stergere
                     if (plant.user_id == currentUserId || currentUserRole === 'admin') {
                         actionButtons = `
-                            <button onclick="editPlant(${plant.id})" style="margin-top: 5px;">Editează</button> 
-                            <button onclick="deletePlant(${plant.id})" style="background-color: #d32f2f; margin-top: 5px;">Șterge</button>
+                            <button class="btn-edit" onclick="editPlant(${plant.id})">Editează</button> 
+                            <button class="btn-delete" onclick="deletePlant(${plant.id})">Șterge</button>
                         `;
                     }
 
