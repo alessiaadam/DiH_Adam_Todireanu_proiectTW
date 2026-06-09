@@ -3,40 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/auth.css">
     <title>Înregistrare - Ierbar Virtual</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 50px;
-        }
 
-        .form-container {
-            max-width: 300px;
-            margin: auto;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
 </head>
 
 <body>
 
     <div class="form-container">
         <h2>Creează un cont</h2>
-        <form action="api/register_action.php" method="POST">
+        <form>
             <label for="username">Nume utilizator:</label>
             <input type="text" id="username" name="username" required>
 
@@ -51,9 +28,12 @@
     </div>
 
     <script>
+        // adaugam un event listener pentru submit pe formularul de inregistrare
         document.querySelector('form').addEventListener('submit', function (e) {
+            // prevenim comportamentul default al formularului (reincarcarea paginii)
             e.preventDefault();
 
+            // extragem datele din formular folosind FormData
             const formData = new FormData(this);
 
             fetch('api/register_action.php', {
@@ -68,9 +48,11 @@
                 })
                 .then(data => {
                     if (data.status === 'success') {
+                        // daca inregistrarea a fost reusita, afisam mesajul de succes si redirectionam utilizatorul catre pagina de login
                         alert(data.message);
                         window.location.href = 'login.html';
                     } else {
+                        // afisam mesajul de eroare returnat de server
                         alert(data.message);
                     }
                 })

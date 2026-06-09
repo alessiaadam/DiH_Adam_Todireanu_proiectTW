@@ -12,7 +12,7 @@
 <body>
     <div class="form-container">
         <h2>Login</h2>
-        <form action="api/login_action.php" method="post">
+        <form>
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required><br><br>
 
@@ -24,8 +24,11 @@
         <p>Nu ai un cont? <a href="register.html">Înregistrează-te aici</a>.</p>
 
         <script>
+            // adaugam un event listener pentru submit pe formularul de login
             document.querySelector('form').addEventListener('submit', function (e) {
+                // prevenim comportamentul default al formularului (reincarcarea paginii)
                 e.preventDefault();
+
                 const formData = new FormData(this);
 
                 fetch('api/login_action.php', {
@@ -40,8 +43,10 @@
                     })
                     .then(data => {
                         if (data.status === 'success') {
+                            // daca login-ul a fost reusit, redirectionam utilizatorul catre dashboard
                             window.location.href = 'dashboard.php';
                         } else {
+                            // afisam mesajul de eroare returnat de server
                             alert(data.message);
                         }
                     })
