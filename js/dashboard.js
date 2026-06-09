@@ -1,3 +1,17 @@
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, function (tag) {
+        const charsToReplace = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        };
+        return charsToReplace[tag] || tag;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const plantsContainer = document.getElementById('plantsContainer');
     const btnSearch = document.getElementById('btnSearch');
@@ -7,17 +21,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const soil = document.getElementById('filterSoil').value;
         const search = document.getElementById('searchName').value;
 
-        const url = `api/get_plants.php?origin=${encodeURIComponent(origin)}&soil=${encodeURIComponent(soil)}&search=${encodeURIComponent(search)}`;
+        let selectedChars = [];
+        document.querySelectorAll('.char-filter:checked').forEach(checkbox => {
+            selectedChars.push(checkbox.value);
+        });
+        const charString = selectedChars.length > 0 ? selectedChars.join(',') : '';
+
+        let url = `api/get_plants.php?origin=${encodeURIComponent(origin)}&soil=${encodeURIComponent(soil)}&search=${encodeURIComponent(search)}`;
+        if (charString) {
+            url += `&characteristics=${encodeURIComponent(charString)}`;
+        }
 
         fetch(url)
             .then(response => response.json())
             .then(data => {
                 plantsContainer.innerHTML = '';
 
+                if (data.error) {
+                    console.error("Eroare PHP:", data.error);
+                    plantsContainer.innerHTML = '<p>A apărut o eroare la încărcarea datelor.</p>';
+                    return;
+                }
+
                 const plants = Array.isArray(data) ? data : (data.plants || []);
 
                 if (plants.length === 0) {
-                    plantsContainer.innerHTML = '<p>Nu am găsit nicio plantă.</p>';
+                    plantsContainer.innerHTML = '<p>Nu am găsit nicio plantă care să corespundă filtrelor.</p>';
                     return;
                 }
 
@@ -27,6 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const imagePath = plant.file_path ? plant.file_path : 'https://placehold.co/400x300/e0e0e0/666666?text=Fara+Poza';
 
                     let actionButtons = '';
+
+                    const currentUserId = data.current_user_id;
+                    const currentUserRole = data.current_user_role;
+
                     if (plant.user_id == currentUserId || currentUserRole === 'admin') {
                         actionButtons = `
                             <button onclick="editPlant(${plant.id})" style="background-color: #2e7d32; margin-top: 5px;">Editează</button>
@@ -36,27 +69,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     card.innerHTML = `
                         <img src="${imagePath}" alt="${plant.common_name}" class="plant-image">
-                        <h4>${plant.common_name}</h4>
-                        <p><i>${plant.scientific_name}</i></p>
+                        <h4>${escapeHTML(plant.common_name)}</h4>
+                        <p><i>${escapeHTML(plant.scientific_name)}</i></p>
                         <button onclick="viewDetails(${plant.id})">Vezi Detalii</button>
-                        <button onclick="deletePlant(${plant.id})" style="background-color: #d32f2f; margin-top: 5px;">Șterge</button>
+                        ${actionButtons}
                     `;
 
                     plantsContainer.appendChild(card);
                 });
             })
-            .catch(error => console.error('Eroare:', error));
+            .catch(error => console.error('Eroare de rețea/JSON:', error));
     }
-    loadPlants();
-    btnSearch.addEventListener('click', loadPlants);
 
-    document.getElementById('filterOrigin').addEventListener('change', loadPlants);
+    loadPlants();
+
+    btnSearch.addEventListener('click', loadPlants);
+    document.getElementById('filterOrigin').addEventListener('keyup', loadPlants); // keyup ca să caute în timp ce scrii
     document.getElementById('filterSoil').addEventListener('change', loadPlants);
     document.getElementById('searchName').addEventListener('keyup', loadPlants);
 
+    document.querySelectorAll('.char-filter').forEach(checkbox => {
+        checkbox.addEventListener('change', loadPlants);
+    });
+
+
     window.deletePlant = function (plantId) {
         if (confirm("Ești sigur că vrei să ștergi această plantă?")) {
-
             fetch('api/delete_plant.php', {
                 method: 'POST',
                 headers: {

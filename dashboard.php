@@ -23,7 +23,7 @@ if (!isset($_SESSION['user_id'])) {
             <a href="add_plant.php">Adaugă Plantă</a>
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                 <a href="admin_dashboard.php" class="green-button">Panou Admin</a>
-                <?php endif; ?>
+            <?php endif; ?>
             <a href="api/logout.php">Logout</a>
         </nav>
     </header>
@@ -34,20 +34,27 @@ if (!isset($_SESSION['user_id'])) {
             <div class="filter-group">
                 <input type="text" id="searchName" placeholder="Caută după nume...">
 
-                <select id="filterOrigin">
-                    <option value="">Toate originile</option>
-                    <option value="Europe">Europa</option>
-                    <option value="Asia">Asia</option>
-                    <option value="America">America</option>
-                </select>
+                <input type="text" id="filterOrigin" placeholder="Caută după origine (ex. Asia, Europa de Est)...">
 
                 <select id="filterSoil">
                     <option value="">Orice tip de sol</option>
                     <option value="nisipos">Nisipos</option>
                     <option value="argilos">Argilos</option>
+                    <option value="lutos">Lutos</option>
+                    <option value="bogat">Bogat</option>
                 </select>
 
                 <button id="btnSearch">Aplică Filtre</button>
+            </div>
+
+            <div class="filter-characteristics"
+                style="margin-top: 15px; background: #f9f9f9; padding: 10px; border-radius: 5px;">
+                <h4 style="margin-top: 0;">Caracteristici:</h4>
+                <label><input type="checkbox" class="char-filter" value="1"> Iubitoare de soare</label>
+                <label><input type="checkbox" class="char-filter" value="8"> Perenă</label>
+                <label><input type="checkbox" class="char-filter" value="9"> Medicinală</label>
+                <label><input type="checkbox" class="char-filter" value="10"> Comestibilă</label>
+                <label><input type="checkbox" class="char-filter" value="11"> Toxică / Otrăvitoare</label>
             </div>
         </section>
 
