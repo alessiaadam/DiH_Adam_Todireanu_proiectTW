@@ -26,15 +26,6 @@ require_once 'api/check_auth.php';
         <label for="origin">Origine:</label>
         <input type="text" id="origin" name="origin" placeholder="ex. Europa">
 
-        <label for="soil">Tip sol preferat:</label>
-        <select id="soil" name="soil">
-            <option value="">Orice tip de sol</option>
-            <option value="nisipos">Nisipos</option>
-            <option value="argilos">Argilos</option>
-            <option value="lutos">Lutos</option>
-            <option value="bogat">Bogat</option>
-        </select>
-
         <label for="status">Statut:</label>
         <select id="status" name="status" required>
             <option value="" disabled selected>-- Alege statutul --</option>
@@ -52,22 +43,22 @@ require_once 'api/check_auth.php';
         <label><b>Caracteristici:</b></label>
         <div class="checkbox-group" style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
             
-            <h4 style="margin-top: 0; color: #4CAF50;">☀️ Necesarul de Lumină</h4>
+            <h4 style="margin-top: 0; color: #4CAF50;">Necesarul de Lumină</h4>
             <label><input type="checkbox" name="characteristics[]" value="1"> Iubitoare de soare</label><br>
             <label><input type="checkbox" name="characteristics[]" value="2"> Semiumbră</label><br>
             <label><input type="checkbox" name="characteristics[]" value="3"> Iubitoare de umbră</label>
             
-            <h4 style="color: #4CAF50;">💧 Necesarul de Apă</h4>
+            <h4 style="color: #4CAF50;">Necesarul de Apă</h4>
             <label><input type="checkbox" name="characteristics[]" value="4"> Rezistentă la secetă</label><br>
             <label><input type="checkbox" name="characteristics[]" value="18"> Moderat</label><br>
             <label><input type="checkbox" name="characteristics[]" value="5"> Iubitoare de umezeală</label><br>
             <label><input type="checkbox" name="characteristics[]" value="6"> Plantă acvatică</label>
             
-            <h4 style="color: #4CAF50;">⏳ Ciclul de Viață</h4>
+            <h4 style="color: #4CAF50;">Ciclul de Viață</h4>
             <label><input type="checkbox" name="characteristics[]" value="7"> Anuală</label><br>
             <label><input type="checkbox" name="characteristics[]" value="8"> Perenă</label>
             
-            <h4 style="color: #4CAF50;">🧪 Proprietăți și Utilizări</h4>
+            <h4 style="color: #4CAF50;">Proprietăți și Utilizări</h4>
             <label><input type="checkbox" name="characteristics[]" value="9"> Medicinală</label><br>
             <label><input type="checkbox" name="characteristics[]" value="10"> Comestibilă</label><br>
             <label><input type="checkbox" name="characteristics[]" value="11"> Toxică / Otrăvitoare</label><br>
@@ -75,7 +66,7 @@ require_once 'api/check_auth.php';
             <label><input type="checkbox" name="characteristics[]" value="13"> Aromatică</label><br>
             <label><input type="checkbox" name="characteristics[]" value="14"> Purifică aerul</label>
             
-            <h4 style="color: #4CAF50;">🌱 Tipul de creștere</h4>
+            <h4 style="color: #4CAF50;"> Tipul de creștere</h4>
             <label><input type="checkbox" name="characteristics[]" value="19"> Arbust</label><br>
             <label><input type="checkbox" name="characteristics[]" value="15"> Cățărătoare / Liană</label><br>
             <label><input type="checkbox" name="characteristics[]" value="16"> Târâtoare</label><br>
