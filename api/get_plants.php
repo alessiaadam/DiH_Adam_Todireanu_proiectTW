@@ -8,7 +8,7 @@ $soil = $_GET['soil'] ?? '';
 $search = $_GET['search'] ?? '';
 $characteristics = $_GET['characteristics'] ?? '';
 
-$sql = "SELECT p.*, m.file_path 
+$sql = "SELECT p.*, MIN(m.file_path) as file_path 
         FROM plants p 
         LEFT JOIN media m ON p.id = m.plant_id AND m.type = 'image' 
         WHERE 1=1";
@@ -28,6 +28,7 @@ if (!empty($search)) {
     $params[] = "%$search%";
 }
 
+
 if (!empty($characteristics)) {
     $char_ids = explode(',', $characteristics);
     $placeholders = implode(',', array_fill(0, count($char_ids), '?'));
@@ -40,6 +41,8 @@ if (!empty($characteristics)) {
     )";
     $params = array_merge($params, $char_ids);
 }
+
+$sql .= " GROUP BY p.id";
 
 try {
     $stmt = $pdo->prepare($sql);

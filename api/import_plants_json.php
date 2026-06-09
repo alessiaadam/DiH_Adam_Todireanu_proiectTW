@@ -1,6 +1,6 @@
 <?php
 session_start();
-header('Content-Type: application/json; charset=utf-8'); 
+header('Content-Type: application/json; charset=utf-8');
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     echo json_encode(["status" => "error", "message" => "Acces interzis! Doar administratorii pot importa date."]);
     exit();
@@ -10,12 +10,12 @@ require_once '../database/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
     $file = $_FILES['import_file'];
-    
+
     if ($file['error'] !== UPLOAD_ERR_OK) {
         echo json_encode(["status" => "error", "message" => "Eroare la încărcarea fișierului pe server."]);
         exit();
     }
-    
+
     $json_content = file_get_contents($file['tmp_name']);
     $data = json_decode($json_content, true);
     
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
                 }
             }
         }
-        
+
         $pdo->commit();
         echo json_encode([
             "status" => "success", 
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
         exit();
 
     } catch (\PDOException $e) {
-        $pdo->rollBack(); 
+        $pdo->rollBack();
         echo json_encode(["status" => "error", "message" => "Eroare baza de date: " . $e->getMessage()]);
         exit();
     }

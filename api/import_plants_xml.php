@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
         echo json_encode(["status" => "error", "message" => "Eroare la încărcarea fișierului XML."]);
         exit();
     }
-    
+
     $xml = simplexml_load_file($file['tmp_name']);
     if ($xml === false) {
         echo json_encode(["status" => "error", "message" => "Fișierul nu este un XML valid."]);
