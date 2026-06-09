@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             url += `&characteristics=${encodeURIComponent(charString)}`;
         }
 
+        plantsContainer.innerHTML = '<p>Se încarcă...</p>';
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -119,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = `plant_details.php?id=${plantId}`;
         window.location.href = url;
     }
-     window.editPlant = function (plantId) {
+    window.editPlant = function (plantId) {
         window.location.href = `edit_plant.php?id=${plantId}`;
     }
 });

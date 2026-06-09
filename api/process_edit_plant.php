@@ -33,21 +33,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['plant_id'])) {
         $stmt_update = $pdo->prepare($sql_update);
         $stmt_update->execute([$common_name, $scientific_name, $description, $origin, $status, $propagation_method, $plant_id]);
 
-        if (isset($_FILES['plant_image']) && $_FILES['plant_image']['error'] == 0) {
+        if (isset($_FILES['plant_media']) && $_FILES['plant_media']['error'][0] !== UPLOAD_ERR_NO_FILE) {
             $stmt_media = $pdo->prepare("SELECT file_path FROM media WHERE plant_id = ?");
             $stmt_media->execute([$plant_id]);
-            $old_media = $stmt_media->fetch();
-            if ($old_media && file_exists("../" . $old_media['file_path'])) {
-                unlink("../" . $old_media['file_path']);
+            $all_old_media = $stmt_media->fetchAll();
+            foreach ($all_old_media as $old_media) {
+                if (file_exists("../" . $old_media['file_path'])) {
+                    unlink("../" . $old_media['file_path']);
+                }
             }
 
-            $file_name = time() . "_" . basename($_FILES["plant_image"]["name"]);
-            $target_file = "../uploads/" . $file_name;
-            $db_file_path = "uploads/" . $file_name;
+            $pdo->prepare("DELETE FROM media WHERE plant_id = ?")->execute([$plant_id]);
 
-            if (move_uploaded_file($_FILES["plant_image"]["tmp_name"], $target_file)) {
-                $pdo->prepare("DELETE FROM media WHERE plant_id = ?")->execute([$plant_id]);
-                $pdo->prepare("INSERT INTO `media` (`plant_id`, `file_path`, `type`) VALUES (?, ?, 'image')")->execute([$plant_id, $db_file_path]);
+            $stmt_insert_media = $pdo->prepare("INSERT INTO `media` (`plant_id`, `file_path`, `type`) VALUES (?, ?, ?)");
+            $file_count = count($_FILES['plant_media']['name']);
+            for ($i = 0; $i < $file_count; $i++) {
+                if ($_FILES['plant_media']['error'][$i] == UPLOAD_ERR_OK) {
+                    $file_name = time() . "_" . uniqid() . "_" . basename($_FILES['plant_media']['name'][$i]);
+                    $target_file = "../uploads/" . $file_name;
+                    $db_file_path = "uploads/" . $file_name;
+                    $mime_type = $_FILES['plant_media']['type'][$i];
+                    $media_type = (strpos($mime_type, 'video') === 0) ? 'video' : 'image';
+                    if (move_uploaded_file($_FILES['plant_media']['tmp_name'][$i], $target_file)) {
+                        $stmt_insert_media->execute([$plant_id, $db_file_path, $media_type]);
+                    }
+                }
             }
         }
 
