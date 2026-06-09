@@ -3,15 +3,15 @@ body {
     font-family: Arial, sans-serif;
     padding: 50px;
     background-color: #f4f9f4;
-    /* Păstrăm fundalul subtil verde */
     color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 80vh;
-    /* Centrează formularul pe verticală */
+    /* formularul e centrat in cel putin 80% din inaltimea ecranului */
 }
 
+/* Containerul principal al formularului */
 .form-container {
     background: white;
     padding: 30px 40px;
@@ -23,15 +23,16 @@ body {
     text-align: center;
 }
 
+/* titlul formularului (Login / Creeaza un cont) */
 .form-container h2 {
     color: #2e7d32;
-    /* Verdele închis elegant folosit la h1 */
     margin-bottom: 25px;
     font-size: 1.8em;
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 10px;
 }
 
+/* Stiluri comune pentru textul descriptiv (text, email, password) */
 .form-container label {
     display: block;
     text-align: left;
@@ -41,30 +42,31 @@ body {
     font-size: 0.9em;
 }
 
+/* Stiluri pentru casutele de text */
 .form-container input {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
     box-sizing: border-box;
-    /* Asigură că padding-ul nu strică lățimea de 100% */
+    /* asigura ca padding-ul nu creste latimea totala a input-ului */
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1em;
     transition: border-color 0.3s;
 }
 
+/* Schimbare de culoare la focus */
 .form-container input:focus {
     outline: none;
     border-color: #2e7d32;
-    /* Border verde la focus */
 }
 
+/* stiluri pentru butonul de submit */
 .form-container button[type="submit"],
 .form-container input[type="submit"] {
     width: 100%;
     padding: 12px;
     background-color: #2e7d32;
-    /* Verdele butonului principal */
     color: white;
     border: none;
     border-radius: 8px;
@@ -74,6 +76,7 @@ body {
     transition: all 0.3s ease;
 }
 
+/* efect de hover pentru butonul de submit */
 .form-container button[type="submit"]:hover,
 .form-container input[type="submit"]:hover {
     background-color: #1b5e20;
@@ -82,12 +85,14 @@ body {
     box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
 }
 
+/* textul de sub formular */
 .form-container p {
     margin-top: 20px;
     font-size: 0.9em;
     color: #555;
 }
 
+/* linkurile din textul de sub formular */
 .form-container a {
     color: #2e7d32;
     text-decoration: none;
@@ -95,7 +100,28 @@ body {
     transition: color 0.3s;
 }
 
+/* efect de hover pentru linkurile din textul de sub formular */
 .form-container a:hover {
     color: #1b5e20;
     text-decoration: underline;
+}
+
+/* ecrane mai mici (telefoane) */
+@media (max-width: 480px) {
+    body {
+        padding: 20px;
+        align-items: flex-start;
+        /* nu mai centram vertical, lasam formularul sus */
+        padding-top: 40px;
+    }
+
+    /* ajustam padding-ul formularului */
+    .form-container {
+        padding: 25px 20px;
+    }
+
+    /* titlu mai mic*/
+    .form-container h2 {
+        font-size: 1.5em;
+    }
 }

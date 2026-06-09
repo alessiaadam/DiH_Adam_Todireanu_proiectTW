@@ -21,9 +21,12 @@ if (!isset($_SESSION['user_id'])) {
         <nav>
             <span>Salut, <?php echo htmlspecialchars($_SESSION['username'] ?? 'Utilizator'); ?>!</span>
             <a href="add_plant.php">Adaugă Plantă</a>
+
+            // Daca utilizatorul are rol de admin, afisam link catre panoul de administrare
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                 <a href="admin_dashboard.php" class="green-button">Panou Admin</a>
             <?php endif; ?>
+
             <a href="api/logout.php">Logout</a>
         </nav>
     </header>
@@ -47,9 +50,8 @@ if (!isset($_SESSION['user_id'])) {
                 <button id="btnSearch">Aplică Filtre</button>
             </div>
 
-            <div class="filter-characteristics"
-                style="margin-top: 15px; background: #f9f9f9; padding: 10px; border-radius: 5px;">
-                <h4 style="margin-top: 0;">Caracteristici:</h4>
+            <div class="filter-characteristics">
+                <h4>Caracteristici:</h4>
                 <label><input type="checkbox" class="char-filter" value="1"> Iubitoare de soare</label>
                 <label><input type="checkbox" class="char-filter" value="8"> Perenă</label>
                 <label><input type="checkbox" class="char-filter" value="9"> Medicinală</label>
