@@ -5,6 +5,7 @@ require_once '../database/database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    //extragem si curatam datele primite din formular
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
@@ -14,11 +15,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
+        // Verificam daca utilizatorul exista si daca parola este corecta
         if ($user && password_verify($password, $user['password'])) {
 
             $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['username'] = $user['name'];
             $_SESSION['user_role'] = $user['role'];
+
             echo json_encode(["status" => "success", "message" => "Autentificare reușită!"]);
             exit();
 
@@ -32,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 } else {
+    //daca metoda de cerere nu este POST, returnam o eroare
     echo json_encode(["status" => "error", "message" => "Metoda de cerere nu este suportată!"]);
     exit();
 }
