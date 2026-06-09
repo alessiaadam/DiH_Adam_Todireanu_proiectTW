@@ -2,6 +2,7 @@
 require_once 'check_auth.php';
 require_once '../database/database.php';
 header('Content-Type: application/json; charset=utf-8');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $common_name = $_POST['common_name'];
     $scientific_name = $_POST['scientific_name'];
@@ -11,11 +12,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = $_POST['status'];
     $propagation_method = $_POST['propagation_method'];
     $user_id = $_SESSION['user_id'];
+
     try {
         $sql_plant = "INSERT INTO `plants` (`user_id`, `common_name`, `scientific_name`, `description`, `origin`, `soil`, `status`, `propagation_method`) VALUES (?,?,?,?,?,?,?,?)";
         $stmt_plant = $pdo->prepare($sql_plant);
         $stmt_plant->execute([$user_id, $common_name, $scientific_name, $description, $origin, $soil, $status, $propagation_method]);
         $plant_id = $pdo->lastInsertId();
+
         if (isset($_FILES['plant_media']) && !empty($_FILES['plant_media']['name'][0])) {
             $file_count = count($_FILES['plant_media']['name']);
             $target_dir = "../uploads/";
@@ -40,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
         }
+
         if (isset($_POST['characteristics'])) {
             $sql_char = "INSERT INTO `plant_characteristics` (`plant_id`, `characteristic_id`) VALUES (?,?)";
             $stmt_char = $pdo->prepare($sql_char);
@@ -47,6 +51,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_char->execute([$plant_id, $char_id]);
             }
         }
+
+        if (isset($_POST['related_species']) && is_array($_POST['related_species'])) {
+            $sql_rel = "INSERT INTO `related_species` (`plant_id_1`, `plant_id_2`) VALUES (?, ?)";
+            $stmt_rel = $pdo->prepare($sql_rel);
+            
+            foreach ($_POST['related_species'] as $related_id) {
+                $stmt_rel->execute([$plant_id, $related_id]);
+                $stmt_rel->execute([$related_id, $plant_id]);
+            }
+        }
+
         echo json_encode([
             "status" => "success",
             "message" => "Planta a fost salvată cu succes!"

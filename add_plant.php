@@ -1,5 +1,12 @@
 <?php
 require_once 'api/check_auth.php';
+require_once 'database/database.php';
+try {
+    $stmt_plants = $pdo->query("SELECT id, common_name FROM plants ORDER BY common_name ASC");
+    $all_plants = $stmt_plants->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $all_plants = [];
+}
 ?>
 
 <!DOCTYPE html>
@@ -85,6 +92,14 @@ require_once 'api/check_auth.php';
                 <label><input type="radio" name="characteristics[]" value="17"> Suculentă</label>
 
             </div>
+            <label for="related_species"><b>Specii Înrudite (opțional):</b> <br>
+                <small style="color: #666; font-weight: normal;">Ține apăsat CTRL (sau CMD pe Mac) pentru a selecta mai multe.</small>
+            </label>
+            <select id="related_species" name="related_species[]" multiple style="height: 120px; width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; padding: 5px;">
+                <?php foreach ($all_plants as $p): ?>
+                    <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['common_name']) ?></option>
+                <?php endforeach; ?>
+            </select>
             <label for="plant_media"><b>Încarcă o imagini/video reprezentative:</b></label>
             <input type="file" id="plant_media" name="plant_media[]" accept="image/*,video/*" multiple required>
 
