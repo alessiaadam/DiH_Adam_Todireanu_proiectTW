@@ -1,60 +1,89 @@
 # Ierbar Virtual
 
-Specificații, instrucțiuni și descriere pentru proiectul "Ierbar Virtual" (colecție digitală de plante).
+Aplicație web colaborativă PHP/MySQL pentru gestionarea unei colecții digitale de plante. Proiectul oferă autentificare, management CRUD pentru plante, upload media, filtre multi-criteriale, import/export de date în formate deschise și modul de administrare.
 
-## Descriere
+## Arhitectură și tehnologie
 
-O aplicație web PHP/MySQL pentru gestionarea unei colecții de plante: autentificare, CRUD plante, încărcare media, import/export (CSV/JSON/XML) și panou administrativ.
+- Front-end: HTML5, CSS3, JavaScript (Fetch API, Ajax)
+- Back-end: PHP 7.4+ / 8+, MySQL / MariaDB, PDO
+- Stocare date: relațională cu tabele `users`, `plants`, `media`, `characteristics`, `plant_characteristics`, `related_species`
+- Comunicarea client-server se face prin API-uri interne PHP apelate asincron
+- Nu sunt folosite framework-uri front-end sau back-end
 
-## Cuprins
+## Funcționalități principale
 
-- Funcționalități
-- Cerințe de sistem
-- Instalare
-- Utilizare
-- Structura proiectului
-- Contribuții
-- Referințe
+- autentificare și înregistrare utilizator
+- gestionare roluri: utilizator normal și administrator
+- adăugare, editare și ștergere plante
+- afișare detalii plantă și galerie media (imagini/video)
+- filtre multi-criteriale și căutare text în dashboard
+- import și export date în formatele CSV, JSON și XML
+- modul de administrare cu listă utilizatori și gestionare plante
+- upload fișiere media în folderul `uploads/`
+- asocieri între specii înrudite și caracteristici de plante
 
-## Funcționalități
+## API-uri și endpoint-uri
 
-- Autentificare / înregistrare
-- Adăugare / editare / ștergere plante
-- Vizualizare detalii plantă + media
-- Import / Export: CSV, JSON, XML
-- Panou administrare (gestionare utilizatori și plante)
+- `api/login_action.php` — autentificare
+- `api/register_action.php` — înregistrare
+- `api/logout.php` — deconectare
+- `api/check_auth.php` — verificare sesiune autenticată
+- `api/get_plants.php` — listare plante filtrate
+- `api/process_add_plant.php` — adăugare plantă
+- `api/process_edit_plant.php` — actualizare plantă
+- `api/delete_plant.php` — ștergere plantă
+- `api/export_plants_csv.php` — export CSV
+- `api/export_plants_json.php` — export JSON
+- `api/export_plants_xml.php` — export XML
+- `api/import_plants_csv.php` — import CSV
+- `api/import_plants_json.php` — import JSON
+- `api/import_plants_xml.php` — import XML
 
-## Cerințe de sistem
+## Instalație locală
 
-- PHP 7.4+ cu extensia PDO
-- MySQL / MariaDB
-- Server web (Apache / Nginx)
-- Permisiuni de scriere pentru folderul `uploads/`
+1. Clonați repository-ul în folderul serverului local (Apache / Nginx).
+2. Importați schemă SQL din `database/dih_db.sql` în MySQL / MariaDB.
+3. Actualizați setările de conectare din `database/database.php`.
+4. Asigurați permisiuni de scriere pentru directorul `uploads/`.
+5. Deschideți `index.html` în browser și accesați aplicația.
 
-## Instalare (local)
+## Utilizare
 
-1. Clonați repo-ul în directorul serverului web.
-2. Importați schema SQL din `database/dih_db.sql` în MySQL.
-3. Actualizați setările DB în `database/database.php` dacă este necesar.
-4. Asigurați permisiuni de scriere pentru `uploads/`.
+- `index.html` — pagină principală
+- `login.html` / `register.html` — autentificare și cont
+- `dashboard.php` — listare plante și filtre
+- `add_plant.php` — formular nouă plantă
+- `edit_plant.php` — editare plantă existentă
+- `admin_dashboard.php` — panou administrare
+- `raport.html` — documentație și SRS
 
-## Rulare
+## Respectarea cerințelor proiectului
 
-Accesați aplicația în browser la URL-ul serverului local (ex: `http://localhost/Proiect_web_git_prefinal`).
+- aplicație Web server-side PHP bazată pe servicii Web
+- utilizare Ajax/Fetch pentru apeluri API asincrone
+- interfață HTML/CSS validă și responsive
+- import/export valori deschise: CSV, JSON, XML
+- modul administrativ dedicat pentru controlul resurselor
+- protecție minimă SQL injection prin PDO prepared statements
+- protecție minimă XSS prin `htmlspecialchars()` la afișarea datelor
 
-## Structura proiectului (selectiv)
+## Limitări cunoscute
 
-- `api/` — endpoint-uri PHP (login, CRUD, import/export)
-- `css/`, `js/` — resurse statice
-- `database/` — conexiune și SQL
-- `uploads/` — media încărcată
-- `raport.html` — SRS (Scholarly HTML)
+- exportul JSON/XML include doar datele principale din tabela `plants`
+- importul CSV presupune un format fix pentru coloane
+- nu există încă un mecanism complet de traducere multilingvă pentru descrieri
 
-## Contribuții
+## Structura proiectului
 
-Deschideți un issue sau trimiteți un pull request. Pentru modificări majore, deschideți mai întâi o discuție.
+- `api/` — endpoint-uri și servicii Web PHP
+- `css/` — stiluri CSS
+- `js/` — scripturi JavaScript client-side
+- `database/` — conexiune DB și schemă SQL
+- `uploads/` — fișiere media încărcate
+- `raport.html` — specificație Scholarly HTML
 
 ## Referințe
 
-- SRS model: IEEE SRS template
-- Scholarly HTML: W3C Scholarly HTML
+- IEEE SRS template
+- W3C Scholarly HTML
+- cerințele proiectului disciplinei Tehnologii Web

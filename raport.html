@@ -11,6 +11,7 @@
         header,h2 { color:#1b5e20 }
         .section { margin-bottom:20px; padding:14px; border-radius:6px; background:#fcfff7 }
         pre.schema { background:#f4f4f4; padding:10px; border-radius:4px; overflow:auto }
+        ul, ol { margin-left: 20px; }
     </style>
 </head>
 <body>
@@ -35,76 +36,91 @@
 
         <section class="section" data-type="overall-description">
             <h2>2. Descriere generală a sistemului</h2>
-            <p><strong>2.1 Perspective:</strong> Sistem web PHP + MySQL cu frontend HTML/CSS/JS și API-uri PHP pentru operațiuni CRUD.</p>
-            <p><strong>2.2 Funcționalități:</strong> Înregistrare/autentificare, adăugare/actualizare/ștergere plante, vizualizare detalii, încărcare media, filtrare și căutare.</p>
-            <p><strong>2.3 Utilizatori:</strong> Utilizator simplu și Administrator (rol `admin`).</p>
-            <p><strong>2.4 Dependențe:</strong> Server web cu PHP+PDO, MySQL, permisiuni `uploads/`.</p>
+            <p><strong>2.1 Perspective:</strong> Aplicația este construită cu HTML/CSS/JS nativ pe front-end și PHP + MySQL pe back-end. Interacțiunea browser-server se face prin API-uri PHP.</p>
+            <p><strong>2.2 Funcționalități generale:</strong> gestionare utilizatori, autentificare, administrare plante, filtrare avansată, import/export date și încărcare media.</p>
+            <p><strong>2.3 Actori:</strong> Utilizator obișnuit (adaugă și editează plante proprii) și Administrator (gestionează datele globale și utilizatorii).</p>
+            <p><strong>2.4 Dependențe:</strong> server web Apache/Nginx, PHP 7.4+/8+, extensie PDO, MySQL/MariaDB, permisiune scriere pentru `uploads/`.</p>
+            <p><strong>2.5 Arhitectură sistem:</strong> Browser → HTML/CSS/JS → Fetch API → endpoint PHP (`api/*.php`) → baza de date relațională. Aplicația folosește un design bazat pe servicii Web fără framework-uri externe.</p>
         </section>
 
         <section class="section" data-type="functional-requirements">
             <h2>3. Cerințe Funcționale</h2>
             <ol>
-                <li><strong>F1 — Autentificare:</strong> Înregistrare, autentificare și deconectare; protejare rute cu `api/check_auth.php`.</li>
-                <li><strong>F2 — Gestionare utilizatori (admin):</strong> Vizualizare listă utilizatori, vizualizare/ștergere înregistrări (admin).</li>
-                <li><strong>F3 — CRUD plante:</strong> Adăugare (`api/process_add_plant.php`), editare (`api/process_edit_plant.php`), ștergere (`api/delete_plant.php`), vizualizare detalii (`plant_details.php`).</li>
-                <li><strong>F4 — Media:</strong> Stocare imagini/video în `uploads/` și referințe în tabela `media`.</li>
-                <li><strong>F5 — Import/Export:</strong> Import și export CSV/JSON/XML prin `api/import_*.php` și `api/export_*.php`.</li>
-                <li><strong>F6 — Căutare/Filtrare:</strong> Endpoint `api/get_plants.php` suportă filtre și căutare text.</li>
+                <li><strong>F1 — Autentificare și autorizare:</strong> utilizatorii pot crea cont, se pot autentifica și pot închide sesiunea.</li>
+                <li><strong>F2 — Modul administrativ:</strong> adminul poate vizualiza lista de utilizatori și lista de plante, și poate șterge înregistrări.</li>
+                <li><strong>F3 — CRUD plante:</strong> orice utilizator autentificat poate adăuga, edita și șterge plante proprii; adminul poate gestiona toate plantele.</li>
+                <li><strong>F4 — Caracteristici plante:</strong> plantele au atribute care includ denumiri, descriere, origine, statut, tip sol, metodă de înmulțire și caracteristici multiple.</li>
+                <li><strong>F5 — Media:</strong> se pot încărca imagini și video-uri pentru fiecare plantă, stocate în `uploads/` și referențiate din tabela `media`.</li>
+                <li><strong>F6 — Căutare și filtrare multi-criterială:</strong> utilizatorii pot combina filtru după origine, sol, nume și caracteristici pentru a găsi plante specifice.</li>
+                <li><strong>F7 — Import/export date:</strong> datele pot fi exportate și importate în formatele CSV, JSON și XML.</li>
             </ol>
         </section>
 
         <section class="section" data-type="nonfunctional-requirements">
             <h2>4. Cerințe Nefuncționale</h2>
             <ul>
-                <li><strong>Securitate:</strong> Sesiuni PHP; verificări roluri server-side; recomandare: hashing parole, input sanitization.</li>
-                <li><strong>Performanță:</strong> Răspuns API optim pentru seturi moderate de date; paginare recomandată la listări mari.</li>
-                <li><strong>Compatibilitate:</strong> Browsere moderne; PHP 7.4+/MySQL.</li>
-                <li><strong>Fiabilitate:</strong> Operațiuni de import în tranzacții pentru consistență.</li>
+                <li><strong>Validitate:</strong> interfața este construită cu HTML/CSS valide și responsive.</li>
+                <li><strong>Performanță:</strong> interacțiunea API este asincronă și rapidă pentru volume moderate de date.</li>
+                <li><strong>Securitate:</strong> protecție contra SQL injection cu PDO prepared statements; escapare XSS la afișarea datelor; verificare server-side a rolurilor.</li>
+                <li><strong>Modularitate:</strong> codul este organizat în fișiere separate pentru API, front-end, stiluri și date.</li>
+                <li><strong>Compatibilitate:</strong> browser moderne și server PHP standard.</li>
             </ul>
         </section>
 
         <section class="section" data-type="data-definitions">
             <h2>5. Definiții de date și schema</h2>
-            <p>Schema SQL se regăsește în: <a href="database/dih_db.sql">database/dih_db.sql</a>. Tabele esențiale:</p>
-            <pre class="schema">users(id, name, email, password_hash, role)
-plants(id, user_id, common_name, scientific_name, description, origin, status, propagation_method)
+            <p>Structura bazei de date este definită în `database/dih_db.sql`. Principalele tabele și relații sunt:</p>
+            <pre class="schema">users(id, name, email, password, role)
+plants(id, user_id, common_name, scientific_name, description, origin, soil, status, propagation_method)
 media(id, plant_id, file_path, type)
 characteristics(id, name, category)
 plant_characteristics(plant_id, characteristic_id)
+related_species(plant_id_1, plant_id_2)
             </pre>
+            <p><strong>Relații:</strong> `plants.user_id` se leagă la `users.id`; `media.plant_id` se leagă la `plants.id`; `plant_characteristics` și `related_species` descriu relațiile complexe dintre plante.</p>
         </section>
 
         <section class="section" data-type="use-cases">
             <h2>6. Cazuri de utilizare</h2>
             <ol>
-                <li><strong>UC1:</strong> Înregistrare și autentificare utilizator.</li>
-                <li><strong>UC2:</strong> Adaugă plantă cu media; sistemul salvează în DB și stochează fișierele.</li>
-                <li><strong>UC3:</strong> Import lot de plante (admin) din CSV/JSON/XML; validare și insert tranzacțional.</li>
+                <li><strong>UC1 — Autentificare:</strong> utilizatorul creează cont și se autentifică pentru a accesa dashboard-ul.</li>
+                <li><strong>UC2 — Adăugare plantă:</strong> utilizatorul completează formularul, încarcă media și salvează planta în colecție.</li>
+                <li><strong>UC3 — Filtrare plante:</strong> utilizatorul aplică filtre multiple pentru a obține un subset de plante relevante.</li>
+                <li><strong>UC4 — Export date:</strong> adminul exportă lista de plante în CSV/JSON/XML.</li>
+                <li><strong>UC5 — Import date:</strong> adminul importă un fișier CSV/JSON/XML cu plante în baza de date.</li>
+                <li><strong>UC6 — Gestionare utilizatori:</strong> adminul vizualizează utilizatorii și poate monitoriza accesul.</li>
             </ol>
         </section>
 
         <section class="section" data-type="constraints">
             <h2>7. Constrângeri</h2>
             <ul>
-                <li>Necesitate PHP + MySQL; permisiuni scriere pentru `uploads/`.</li>
-                <li>Datele importate trebuie validate (format, câmpuri minime).</li>
+                <li>Nu se folosesc framework-uri front-end sau back-end.</li>
+                <li>Comunicarea se realizează prin API-uri Web și Ajax/Fetch.</li>
+                <li>Sunt folosite formate deschise pentru import/export: CSV, JSON, XML.</li>
+                <li>Există un modul administrativ pentru controlul resurselor aplicației.</li>
             </ul>
         </section>
 
         <section class="section" data-type="acceptance-criteria">
             <h2>8. Criterii de acceptare</h2>
             <ul>
-                <li>Flux de autentificare funcțional.</li>
-                <li>CRUD plante testat manual: adăugare/editează/șterge.</li>
-                <li>Import/Export corecte pentru fișiere validate.</li>
+                <li>Autentificarea și înregistrarea funcționează corect.</li>
+                <li>CRUD pentru plante funcționează și este protejat prin permisiuni.</li>
+                <li>Dashboard-ul permite căutare și filtrare multi-criterială.</li>
+                <li>Exportul și importul CSV/JSON/XML funcționează.</li>
+                <li>Există modul administrativ pentru utilizatori și plante.</li>
+                <li>Interfața este responsive și construită fără framework-uri.</li>
             </ul>
         </section>
 
         <section class="section" data-type="references">
             <h2>9. Referințe</h2>
             <ul>
-                <li>IEEE SRS template (adaptare).</li>
-                <li>W3C Scholarly HTML — structurare semantică pentru publicare pe web.</li>
+                <li>IEEE System Requirements Specification Template.</li>
+                <li>W3C Scholarly HTML.</li>
+                <li>Cerințele proiectului Tehnologii Web pentru anul 2026.</li>
+                <li>GitHub Student Developer Pack.</li>
             </ul>
         </section>
 
