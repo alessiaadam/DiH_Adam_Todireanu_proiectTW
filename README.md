@@ -17,7 +17,7 @@ Aplicație web colaborativă PHP/MySQL pentru gestionarea unei colecții digital
 - adăugare, editare și ștergere plante
 - afișare detalii plantă și galerie media (imagini/video)
 - filtre multi-criteriale și căutare text în dashboard
-- import și export date în formatele CSV, JSON și XML
+- import și export date în formatele CSV, JSON și XML, cu suport complet pentru plante, media, caracteristici și relații între specii
 - modul de administrare cu listă utilizatori și gestionare plante
 - upload fișiere media în folderul `uploads/`
 - asocieri între specii înrudite și caracteristici de plante
@@ -67,10 +67,10 @@ Aplicație web colaborativă PHP/MySQL pentru gestionarea unei colecții digital
 - protecție minimă SQL injection prin PDO prepared statements
 - protecție minimă XSS prin `htmlspecialchars()` la afișarea datelor
 
-## Limitări cunoscute și precizări export/import
+## Detalii export/import
 
-- **Export/import CSV**: acoperă doar datele de bază ale plantelor (fără media, caracteristici, relații). Se recomandă pentru backup simplificat.
-- **Export/import JSON și XML**: includ structura completă a ierbarului cu plante, media, caracteristici și relații între specii. Se recomandă pentru backup integral și transfer complet de date.
+- **Export/import CSV**: acoperă acum structura completă a ierbarului, incluzând plantele, media, caracteristicile, asocierile plantă-caracteristică și relațiile între specii. Formatul CSV este organizat pe secțiuni pentru a putea fi re-importat corect.
+- **Export/import JSON și XML**: includ, de asemenea, structura completă a ierbarului cu plante, media, caracteristici și relații între specii.
 - Nu există încă un mecanism complet de traducere multilingvă pentru descrieri.
 
 ## Structura proiectului

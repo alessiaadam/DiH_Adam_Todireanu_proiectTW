@@ -1,9 +1,16 @@
 <?php
 session_start();
-// Verificare admin...
+header('Content-Type: application/json');
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+    echo json_encode(["status" => "error", "message" => "Acces interzis! Doar administratorii pot importa date CSV."]);
+    exit();
+}
+
 require_once '../database/database.php';
 
-header('Content-Type: application/json');
+function removeBom($value) {
+    return preg_replace('/^\xEF\xBB\xBF/', '', $value);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
     $file = $_FILES['import_file'];
@@ -13,47 +20,122 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
         exit();
     }
 
-    // Deschidem fișierul încărcat pentru citire
-    $handle = fopen($file['tmp_name'], "r");
-    if ($handle !== FALSE) {
+    $handle = fopen($file['tmp_name'], 'r');
+    if ($handle !== false) {
         try {
-            $sql = "INSERT INTO plants (common_name, scientific_name, origin, status, propagation_method, user_id) 
-                    VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt = $pdo->prepare($sql);
+            $pdo->beginTransaction();
             $current_user_id = $_SESSION['user_id'];
+            $plant_id_map = [];
+            $current_section = null;
+            $header = [];
 
-            // Citim primul rând (capul de tabel) ca să-l ignorăm (nu vrem să inserăm cuvântul "Nume Popular" în BD)
-            fgetcsv($handle, 1000, ",");
+            $insert_plant = $pdo->prepare("INSERT INTO plants (user_id, common_name, scientific_name, description, origin, soil, status, propagation_method) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $insert_media = $pdo->prepare("INSERT INTO media (plant_id, file_path, type) VALUES (?, ?, ?)");
+            $insert_char = $pdo->prepare("INSERT INTO characteristics (id, name, category) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE name = VALUES(name), category = VALUES(category)");
+            $insert_plant_char = $pdo->prepare("INSERT INTO plant_characteristics (plant_id, characteristic_id) VALUES (?, ?)");
+            $insert_related = $pdo->prepare("INSERT INTO related_species (plant_id_1, plant_id_2) VALUES (?, ?)");
 
-            // Citim restul rândurilor unul câte unul
-            // fgetcsv împarte automat rândul într-un array bazat pe virgule
-            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                // $data[0] este ID-ul (pe care îl ignorăm la insert), $data[1] e common_name, etc.
-                // Atenție la indecși: ei trebuie să corespundă cu ordinea din fputcsv de la export!
-                $stmt->execute([
-                    $data[1], // common_name
-                    $data[2], // scientific_name
-                    $data[3], // origin
-                    $data[4], // status
-                    $data[5], // propagation_method
-                    $current_user_id
-                ]);
+            while (($data = fgetcsv($handle, 0, ',')) !== false) {
+                if (count($data) === 0) {
+                    continue;
+                }
+
+                $firstCell = trim(removeBom($data[0]));
+
+                if ($firstCell === '' && count($data) === 1) {
+                    continue;
+                }
+
+                if (stripos($firstCell, '# SECTION:') === 0) {
+                    $sectionName = trim(substr($firstCell, strlen('# SECTION:')));
+                    $current_section = strtolower($sectionName);
+                    $header = [];
+                    continue;
+                }
+
+                if ($current_section === null) {
+                    continue;
+                }
+
+                if (empty($header)) {
+                    $header = array_map('trim', $data);
+                    continue;
+                }
+
+                $row = array_combine($header, array_map('trim', $data));
+                if ($row === false) {
+                    continue;
+                }
+
+                switch ($current_section) {
+                    case 'plants':
+                        $oldId = (int)($row['id'] ?? 0);
+                        $insert_plant->execute([
+                            $current_user_id,
+                            $row['common_name'] ?? '',
+                            $row['scientific_name'] ?? '',
+                            $row['description'] ?? '',
+                            $row['origin'] ?? '',
+                            $row['soil'] ?? null,
+                            $row['status'] ?? '',
+                            $row['propagation_method'] ?? ''
+                        ]);
+                        $plant_id_map[$oldId] = $pdo->lastInsertId();
+                        break;
+
+                    case 'media':
+                        $oldPlantId = (int)($row['plant_id'] ?? 0);
+                        $newPlantId = $plant_id_map[$oldPlantId] ?? null;
+                        if ($newPlantId) {
+                            $insert_media->execute([$newPlantId, $row['file_path'] ?? '', $row['type'] ?? 'image']);
+                        }
+                        break;
+
+                    case 'characteristics':
+                        $insert_char->execute([
+                            (int)($row['id'] ?? 0),
+                            $row['name'] ?? '',
+                            $row['category'] ?? ''
+                        ]);
+                        break;
+
+                    case 'plant_characteristics':
+                        $oldPlantId = (int)($row['plant_id'] ?? 0);
+                        $newPlantId = $plant_id_map[$oldPlantId] ?? null;
+                        if ($newPlantId) {
+                            $insert_plant_char->execute([$newPlantId, (int)($row['characteristic_id'] ?? 0)]);
+                        }
+                        break;
+
+                    case 'related_species':
+                        $oldPlantId1 = (int)($row['plant_id_1'] ?? 0);
+                        $oldPlantId2 = (int)($row['plant_id_2'] ?? 0);
+                        $newPlantId1 = $plant_id_map[$oldPlantId1] ?? null;
+                        $newPlantId2 = $plant_id_map[$oldPlantId2] ?? null;
+                        if ($newPlantId1 && $newPlantId2) {
+                            $insert_related->execute([$newPlantId1, $newPlantId2]);
+                        }
+                        break;
+                }
             }
+
             fclose($handle);
+            $pdo->commit();
 
-            echo json_encode(["status" => "success", "message" => "Datele din CSV au fost importate!"]);
+            echo json_encode(["status" => "success", "message" => "CSV-ul a fost importat complet cu succes!" ]);
             exit();
-
         } catch (\PDOException $e) {
-            echo json_encode(["status" => "error", "message" => "Eroare la baza de date: " . $e->getMessage()]);
+            $pdo->rollBack();
+            fclose($handle);
+            echo json_encode(["status" => "error", "message" => "Eroare la importul CSV: " . $e->getMessage()]);
             exit();
         }
-    } else {
-        echo json_encode(["status" => "error", "message" => "Nu s-a putut citi fișierul CSV."]);
-        exit();
     }
-} else {
-    echo json_encode(["status" => "error", "message" => "Metodă incorectă."]);
+
+    echo json_encode(["status" => "error", "message" => "Nu s-a putut citi fișierul CSV."]);
     exit();
 }
+
+echo json_encode(["status" => "error", "message" => "Metodă incorectă."]);
+exit();
 ?>
