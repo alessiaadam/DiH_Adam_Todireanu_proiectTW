@@ -28,6 +28,12 @@ try {
     $stmt_chars = $pdo->prepare("SELECT characteristic_id FROM plant_characteristics WHERE plant_id = ?");
     $stmt_chars->execute([$plant_id]);
     $saved_chars = $stmt_chars->fetchAll(PDO::FETCH_COLUMN);
+    $stmt_all_plants = $pdo->prepare("SELECT id, common_name FROM plants WHERE id != ? ORDER BY common_name ASC");
+    $stmt_all_plants->execute([$plant_id]);
+    $all_plants = $stmt_all_plants->fetchAll(PDO::FETCH_ASSOC);
+    $stmt_saved_rel = $pdo->prepare("SELECT plant_id_2 FROM related_species WHERE plant_id_1 = ?");
+    $stmt_saved_rel->execute([$plant_id]);
+    $saved_related = $stmt_saved_rel->fetchAll(PDO::FETCH_COLUMN);
 
 } catch (Exception $e) {
     header("Location: dashboard.php");
@@ -77,22 +83,22 @@ try {
         <label><b>Caracteristici:</b></label>
         <div class="checkbox-group" style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
             
-            <h4 style="margin-top: 0; color: #4CAF50;">☀️ Necesarul de Lumină</h4>
+            <h4 style="margin-top: 0; color: #4CAF50;">Necesarul de Lumină</h4>
             <label><input type="checkbox" name="characteristics[]" value="1" <?= in_array(1, $saved_chars) ? 'checked' : ''; ?>> Iubitoare de soare</label><br>
             <label><input type="checkbox" name="characteristics[]" value="2" <?= in_array(2, $saved_chars) ? 'checked' : ''; ?>> Semiumbră</label><br>
             <label><input type="checkbox" name="characteristics[]" value="3" <?= in_array(3, $saved_chars) ? 'checked' : ''; ?>> Iubitoare de umbră</label>
             
-            <h4 style="color: #4CAF50;">💧 Necesarul de Apă</h4>
+            <h4 style="color: #4CAF50;">Necesarul de Apă</h4>
             <label><input type="checkbox" name="characteristics[]" value="4" <?= in_array(4, $saved_chars) ? 'checked' : ''; ?>> Rezistentă la secetă</label><br>
             <label><input type="checkbox" name="characteristics[]" value="18" <?= in_array(18, $saved_chars) ? 'checked' : ''; ?>> Moderat</label><br>
             <label><input type="checkbox" name="characteristics[]" value="5" <?= in_array(5, $saved_chars) ? 'checked' : ''; ?>> Iubitoare de umezeală</label><br>
             <label><input type="checkbox" name="characteristics[]" value="6" <?= in_array(6, $saved_chars) ? 'checked' : ''; ?>> Plantă acvatică</label>
             
-            <h4 style="color: #4CAF50;">⏳ Ciclul de Viață</h4>
+            <h4 style="color: #4CAF50;">Ciclul de Viață</h4>
             <label><input type="checkbox" name="characteristics[]" value="7" <?= in_array(7, $saved_chars) ? 'checked' : ''; ?>> Anuală</label><br>
             <label><input type="checkbox" name="characteristics[]" value="8" <?= in_array(8, $saved_chars) ? 'checked' : ''; ?>> Perenă</label>
             
-            <h4 style="color: #4CAF50;">🧪 Proprietăți și Utilizări</h4>
+            <h4 style="color: #4CAF50;">Proprietăți și Utilizări</h4>
             <label><input type="checkbox" name="characteristics[]" value="9" <?= in_array(9, $saved_chars) ? 'checked' : ''; ?>> Medicinală</label><br>
             <label><input type="checkbox" name="characteristics[]" value="10" <?= in_array(10, $saved_chars) ? 'checked' : ''; ?>> Comestibilă</label><br>
             <label><input type="checkbox" name="characteristics[]" value="11" <?= in_array(11, $saved_chars) ? 'checked' : ''; ?>> Toxică / Otrăvitoare</label><br>
@@ -100,15 +106,23 @@ try {
             <label><input type="checkbox" name="characteristics[]" value="13" <?= in_array(13, $saved_chars) ? 'checked' : ''; ?>> Aromatică</label><br>
             <label><input type="checkbox" name="characteristics[]" value="14" <?= in_array(14, $saved_chars) ? 'checked' : ''; ?>> Purifică aerul</label>
             
-            <h4 style="color: #4CAF50;">🌱 Tipul de creștere</h4>
+            <h4 style="color: #4CAF50;">Tipul de creștere</h4>
             <label><input type="checkbox" name="characteristics[]" value="19" <?= in_array(19, $saved_chars) ? 'checked' : ''; ?>> Arbust</label><br>
             <label><input type="checkbox" name="characteristics[]" value="15" <?= in_array(15, $saved_chars) ? 'checked' : ''; ?>> Cățărătoare / Liană</label><br>
             <label><input type="checkbox" name="characteristics[]" value="16" <?= in_array(16, $saved_chars) ? 'checked' : ''; ?>> Târâtoare</label><br>
             <label><input type="checkbox" name="characteristics[]" value="17" <?= in_array(17, $saved_chars) ? 'checked' : ''; ?>> Suculentă</label>
 
         </div>
-        <label for="plant_image"><b>Schimbă imaginea (opțional):</b></label>
-        <input type="file" id="plant_image" name="plant_image" accept="image/*">
+        <label for="related_species"><b>Specii Înrudite (opțional):</b> <br>
+            <small style="color: #666; font-weight: normal;">Ține apăsat CTRL (sau CMD pe Mac) pentru a selecta mai multe.</small>
+        </label>
+        <select id="related_species" name="related_species[]" multiple style="height: 120px; width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; padding: 5px;">
+            <?php foreach ($all_plants as $p): ?>
+                <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['common_name']) ?></option>
+            <?php endforeach; ?>
+        </select>
+        <label for="plant_media"><b>Încarcă o imagini/video reprezentative:</b></label>
+            <input type="file" id="plant_media" name="plant_media[]" accept="image/*,video/*" multiple required>
 
         <button type="submit">Salvează Modificările</button>
     </form>

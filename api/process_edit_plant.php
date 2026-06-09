@@ -58,7 +58,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['plant_id'])) {
                 $stmt_char->execute([$plant_id, $char_id]);
             }
         }
-
+        $pdo->prepare("DELETE FROM related_species WHERE plant_id_1 = ? OR plant_id_2 = ?")->execute([$plant_id, $plant_id]);
+        if (isset($_POST['related_species']) && is_array($_POST['related_species'])) {
+            $stmt_rel = $pdo->prepare("INSERT INTO `related_species` (`plant_id_1`, `plant_id_2`) VALUES (?, ?)");
+            foreach ($_POST['related_species'] as $related_id) {
+                // Legătura directă
+                $stmt_rel->execute([$plant_id, $related_id]);
+                // Legătura inversă
+                $stmt_rel->execute([$related_id, $plant_id]);
+            }
+        }
         echo json_encode(["status" => "success", "message" => "Planta a fost modificată cu succes!"]);
         exit();
 
