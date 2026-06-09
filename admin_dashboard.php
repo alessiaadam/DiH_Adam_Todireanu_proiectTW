@@ -22,7 +22,7 @@ require_once 'api/fetch_admin_data.php';
     <div class="container">
         <h1>Panou de Administrare</h1>
         <div class="toolbar">
-            <a href="dashboard.php" class="btn btn-green"">Înapoi la Dashboard</a>
+            <a href="dashboard.php" class="btn btn-green">Înapoi la Dashboard</a>
             <a href="add_plant.php" class="btn btn-green">+ Adaugă plantă</a>
 
             <form id="formExport" action="api/export_plants_json.php" method="GET" class="action-form">

@@ -37,7 +37,7 @@
         <section class="section" data-type="overall-description">
             <h2>2. Descriere generală a sistemului</h2>
             <p><strong>2.1 Perspective:</strong> Aplicația este construită cu HTML/CSS/JS nativ pe front-end și PHP + MySQL pe back-end. Interacțiunea browser-server se face prin API-uri PHP.</p>
-            <p><strong>2.2 Funcționalități generale:</strong> gestionare utilizatori, autentificare, administrare plante, filtrare avansată, import/export date și încărcare media.</p>
+            <p><strong>2.2 Funcționalități generale:</strong> gestionare utilizatori, autentificare, administrare plante, filtrare avansată, import/export date complete și încărcare media.</p>
             <p><strong>2.3 Actori:</strong> Utilizator obișnuit (adaugă și editează plante proprii) și Administrator (gestionează datele globale și utilizatorii).</p>
             <p><strong>2.4 Dependențe:</strong> server web Apache/Nginx, PHP 7.4+/8+, extensie PDO, MySQL/MariaDB, permisiune scriere pentru `uploads/`.</p>
             <p><strong>2.5 Arhitectură sistem:</strong> Browser → HTML/CSS/JS → Fetch API → endpoint PHP (`api/*.php`) → baza de date relațională. Aplicația folosește un design bazat pe servicii Web fără framework-uri externe.</p>
@@ -52,7 +52,7 @@
                 <li><strong>F4 — Caracteristici plante:</strong> plantele au atribute care includ denumiri, descriere, origine, statut, tip sol, metodă de înmulțire și caracteristici multiple.</li>
                 <li><strong>F5 — Media:</strong> se pot încărca imagini și video-uri pentru fiecare plantă, stocate în `uploads/` și referențiate din tabela `media`.</li>
                 <li><strong>F6 — Căutare și filtrare multi-criterială:</strong> utilizatorii pot combina filtru după origine, sol, nume și caracteristici pentru a găsi plante specifice.</li>
-                <li><strong>F7 — Import/export date:</strong> datele pot fi exportate și importate în formatele CSV, JSON și XML. CSV acoperă doar plantele de bază; JSON și XML includ structura completă cu media, caracteristici și relații între specii.</li>
+                <li><strong>F7 — Import/export date:</strong> datele pot fi exportate și importate în formatele CSV, JSON și XML. Toate formatele suportă structura completă a ierbarului, inclusiv plante, media, caracteristici, asocieri plantă-caracteristică și relații între specii.</li>
             </ol>
         </section>
 
