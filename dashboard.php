@@ -22,7 +22,6 @@ if (!isset($_SESSION['user_id'])) {
             <span>Salut, <?php echo htmlspecialchars($_SESSION['username'] ?? 'Utilizator'); ?>!</span>
             <a href="add_plant.php">Adaugă Plantă</a>
 
-            // Daca utilizatorul are rol de admin, afisam link catre panoul de administrare
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                 <a href="admin_dashboard.php" class="green-button">Panou Admin</a>
             <?php endif; ?>

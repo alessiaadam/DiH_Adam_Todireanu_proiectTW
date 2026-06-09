@@ -93,19 +93,28 @@ try {
                 style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 5px;">
 
                 <h4 style="margin-top: 0; color: #4CAF50;">Necesarul de Lumină</h4>
-                <label><input type="checkbox" name="characteristics[]" value="1" <?= in_array(1, $saved_chars) ? 'checked' : ''; ?>> Iubitoare de soare</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="2" <?= in_array(2, $saved_chars) ? 'checked' : ''; ?>> Semiumbră</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="3" <?= in_array(3, $saved_chars) ? 'checked' : ''; ?>> Iubitoare de umbră</label>
+                <label><input type="radio" name="light" value="1" <?= in_array(1, $saved_chars) ? 'checked' : ''; ?>>
+                    Iubitoare de soare</label><br>
+                <label><input type="radio" name="light" value="2" <?= in_array(2, $saved_chars) ? 'checked' : ''; ?>>
+                    Semiumbră</label><br>
+                <label><input type="radio" name="light" value="3" <?= in_array(3, $saved_chars) ? 'checked' : ''; ?>>
+                    Iubitoare de umbră</label>
 
                 <h4 style="color: #4CAF50;">Necesarul de Apă</h4>
-                <label><input type="checkbox" name="characteristics[]" value="4" <?= in_array(4, $saved_chars) ? 'checked' : ''; ?>> Rezistentă la secetă</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="18" <?= in_array(18, $saved_chars) ? 'checked' : ''; ?>> Moderat</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="5" <?= in_array(5, $saved_chars) ? 'checked' : ''; ?>> Iubitoare de umezeală</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="6" <?= in_array(6, $saved_chars) ? 'checked' : ''; ?>> Plantă acvatică</label>
+                <label><input type="radio" name="water" value="4" <?= in_array(4, $saved_chars) ? 'checked' : ''; ?>>
+                    Rezistentă la secetă</label><br>
+                <label><input type="radio" name="water" value="18" <?= in_array(18, $saved_chars) ? 'checked' : ''; ?>>
+                    Moderat</label><br>
+                <label><input type="radio" name="water" value="5" <?= in_array(5, $saved_chars) ? 'checked' : ''; ?>>
+                    Iubitoare de umezeală</label><br>
+                <label><input type="radio" name="water" value="6" <?= in_array(6, $saved_chars) ? 'checked' : ''; ?>>
+                    Plantă acvatică</label>
 
                 <h4 style="color: #4CAF50;">Ciclul de Viață</h4>
-                <label><input type="checkbox" name="characteristics[]" value="7" <?= in_array(7, $saved_chars) ? 'checked' : ''; ?>> Anuală</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="8" <?= in_array(8, $saved_chars) ? 'checked' : ''; ?>> Perenă</label>
+                <label><input type="radio" name="lifecycle" value="7" <?= in_array(7, $saved_chars) ? 'checked' : ''; ?>>
+                    Anuală</label><br>
+                <label><input type="radio" name="lifecycle" value="8" <?= in_array(8, $saved_chars) ? 'checked' : ''; ?>>
+                    Perenă</label>
 
                 <h4 style="color: #4CAF50;">Proprietăți și Utilizări</h4>
                 <label><input type="checkbox" name="characteristics[]" value="9" <?= in_array(9, $saved_chars) ? 'checked' : ''; ?>> Medicinală</label><br>
@@ -116,10 +125,14 @@ try {
                 <label><input type="checkbox" name="characteristics[]" value="14" <?= in_array(14, $saved_chars) ? 'checked' : ''; ?>> Purifică aerul</label>
 
                 <h4 style="color: #4CAF50;">Tipul de creștere</h4>
-                <label><input type="checkbox" name="characteristics[]" value="19" <?= in_array(19, $saved_chars) ? 'checked' : ''; ?>> Arbust</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="15" <?= in_array(15, $saved_chars) ? 'checked' : ''; ?>> Cățărătoare / Liană</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="16" <?= in_array(16, $saved_chars) ? 'checked' : ''; ?>> Târâtoare</label><br>
-                <label><input type="checkbox" name="characteristics[]" value="17" <?= in_array(17, $saved_chars) ? 'checked' : ''; ?>> Suculentă</label>
+                <label><input type="radio" name="growth" value="19" <?= in_array(19, $saved_chars) ? 'checked' : ''; ?>>
+                    Arbust</label><br>
+                <label><input type="radio" name="growth" value="15" <?= in_array(15, $saved_chars) ? 'checked' : ''; ?>>
+                    Cățărătoare / Liană</label><br>
+                <label><input type="radio" name="growth" value="16" <?= in_array(16, $saved_chars) ? 'checked' : ''; ?>>
+                    Târâtoare</label><br>
+                <label><input type="radio" name="growth" value="17" <?= in_array(17, $saved_chars) ? 'checked' : ''; ?>>
+                    Suculentă</label>
 
             </div>
             <label for="related_species"><b>Specii Înrudite (opțional):</b> <br>
@@ -143,6 +156,16 @@ try {
         document.getElementById('editPlantForm').addEventListener('submit', function (event) {
             event.preventDefault();
             const formData = new FormData(this);
+
+            ['light', 'water', 'lifecycle', 'growth'].forEach(groupName => {
+                const selected = this.querySelector(`input[name="${groupName}"]:checked`);
+                if (selected) {
+                    formData.append('characteristics[]', selected.value);
+                }
+            });
+
+            const relatedSelect = document.getElementById('related_species');
+
             fetch('api/process_edit_plant.php', {
                 method: 'POST',
                 body: formData
