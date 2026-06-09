@@ -15,11 +15,11 @@ header('Content-Disposition: attachment; filename="ierbar_export.csv"');
 $output = fopen('php://output', 'w');
 
 // Adăugăm primul rând: Capul de tabel (numele coloanelor)
-fputcsv($output, ['ID', 'Nume Popular', 'Nume Stiintific', 'Origine', 'Statut', 'Metoda Inmultire']);
+fputcsv($output, ['ID', 'Nume Popular', 'Nume Stiintific', 'Origine', 'Statut', 'Metoda Inmultire', 'Sol']);
 
 try {
     // Luăm plantele din baza de date
-    $stmt = $pdo->query("SELECT id, common_name, scientific_name, origin, status, propagation_method FROM plants");
+    $stmt = $pdo->query("SELECT id, common_name, scientific_name, origin, status, propagation_method, soil FROM plants");
 
     // Parcurgem fiecare rând din baza de date
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

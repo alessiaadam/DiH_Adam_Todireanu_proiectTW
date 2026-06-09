@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
     $handle = fopen($file['tmp_name'], "r");
     if ($handle !== FALSE) {
         try {
-            $sql = "INSERT INTO plants (common_name, scientific_name, origin, status, propagation_method, user_id) 
-                    VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO plants (common_name, scientific_name, origin, status, propagation_method, soil, user_id) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $current_user_id = $_SESSION['user_id'];
 
@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
                     $data[3], // origin
                     $data[4], // status
                     $data[5], // propagation_method
+                    $data[6], // soil
                     $current_user_id
                 ]);
             }
