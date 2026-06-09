@@ -59,6 +59,7 @@ CREATE TABLE `plants` (
   `scientific_name` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `origin` varchar(100) NOT NULL,
+  `soil` varchar(100) DEFAULT NULL,
   `status` varchar(100) NOT NULL,
   `propagation_method` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

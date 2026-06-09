@@ -21,7 +21,9 @@ if (!isset($_SESSION['user_id'])) {
         <nav>
             <span>Salut, <?php echo htmlspecialchars($_SESSION['username'] ?? 'Utilizator'); ?>!</span>
             <a href="add_plant.php">Adaugă Plantă</a>
-            <a href="admin_dashboard.php" class="green-button">Panou Admin</a>
+            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                <a href="admin_dashboard.php" class="green-button">Panou Admin</a>
+                <?php endif; ?>
             <a href="api/logout.php">Logout</a>
         </nav>
     </header>

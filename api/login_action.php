@@ -1,5 +1,6 @@
 <?php
 session_start();
+header('Content-Type: application/json');
 require_once '../database/database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -18,19 +19,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_role'] = $user['role'];
-            header("Location: ../dashboard.php");
+            echo json_encode(["status" => "success", "message" => "Autentificare reușită!"]);
             exit();
 
         } else {
-            echo "<h3>Eroare: Email sau parolă incorecte!</h3>";
-            echo "<a href='../login.html'>Încearcă din nou</a>";
+            echo json_encode(["status" => "error", "message" => "Email sau parolă incorecte!"]);
+            exit();
         }
 
     } catch (\PDOException $e) {
-        echo "A apărut o eroare la conectare: " . $e->getMessage();
+        echo json_encode(["status" => "error", "message" => "A apărut o eroare la conectare: " . $e->getMessage()]);
+        exit();
     }
 } else {
-    header("Location: ../login.html");
+    echo json_encode(["status" => "error", "message" => "Metoda de cerere nu este suportată!"]);
     exit();
 }
 ?>
