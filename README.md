@@ -67,11 +67,11 @@ Aplicație web colaborativă PHP/MySQL pentru gestionarea unei colecții digital
 - protecție minimă SQL injection prin PDO prepared statements
 - protecție minimă XSS prin `htmlspecialchars()` la afișarea datelor
 
-## Limitări cunoscute
+## Limitări cunoscute și precizări export/import
 
-- exportul JSON/XML include doar datele principale din tabela `plants`
-- importul CSV presupune un format fix pentru coloane
-- nu există încă un mecanism complet de traducere multilingvă pentru descrieri
+- **Export/import CSV**: acoperă doar datele de bază ale plantelor (fără media, caracteristici, relații). Se recomandă pentru backup simplificat.
+- **Export/import JSON și XML**: includ structura completă a ierbarului cu plante, media, caracteristici și relații între specii. Se recomandă pentru backup integral și transfer complet de date.
+- Nu există încă un mecanism complet de traducere multilingvă pentru descrieri.
 
 ## Structura proiectului
 
