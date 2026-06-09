@@ -17,6 +17,10 @@ header,
     margin-bottom: 20px;
 }
 
+#filterOrigin {
+    min-width: 300px;
+}
+
 /* Grila cu plante */
 .plants-grid {
     display: flex;
@@ -231,6 +235,7 @@ header nav a[href="add_plant.php"]:hover {
     transform: translateY(-2px);
     /* Se ridică puțin când pui mouse-ul */
 }
+
 /*buton "Panou admin"*/
 .green-button {
     background-color: #2e7d32;
@@ -249,6 +254,7 @@ header nav a[href="add_plant.php"]:hover {
     border-color: #1b5e20;
     transform: translateY(-2px);
 }
+
 /* Butonul "Logout" (Roșu/Inversat) */
 header nav a[href="api/logout.php"] {
     background-color: transparent;
