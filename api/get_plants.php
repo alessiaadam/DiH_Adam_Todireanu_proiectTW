@@ -40,7 +40,7 @@ if (!empty($characteristics)) {
         FROM plant_characteristics 
         WHERE characteristic_id IN ($placeholders)
         GROUP BY plant_id
-        HAVING COUNT(DISTINCT characteristic_id) = " . count($char_ids) . " // asiguram ca planta are toate caracteristicile selectate, nu doar una dintre ele
+        HAVING COUNT(DISTINCT characteristic_id) = " . count($char_ids) . "
     )";
     $params = array_merge($params, $char_ids); // adaugam ID-urile caracteristicilor ca parametrii pentru interogare
 }
