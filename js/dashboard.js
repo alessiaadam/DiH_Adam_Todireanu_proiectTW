@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let actionButtons = '';
                     if (plant.user_id == currentUserId || currentUserRole === 'admin') {
                         actionButtons = `
-                            <button onclick="editPlant(${plant.id})" style="background-color: #f57c00; margin-top: 5px;">Editează</button>
+                            <button onclick="editPlant(${plant.id})" style="background-color: #2e7d32; margin-top: 5px;">Editează</button>
                             <button onclick="deletePlant(${plant.id})" style="background-color: #d32f2f; margin-top: 5px;">Șterge</button>
                         `;
                     }
