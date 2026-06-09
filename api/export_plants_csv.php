@@ -7,28 +7,25 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     die('Acces interzis!');
 }
 
-// Setăm headerele pentru a forța browserul să descarce un fișier CSV, nu să-l afișeze pe ecran
+// Export CSV - Acoperă doar datele de bază ale plantelor
+// Pentru o copie completă a ierbarului cu media, caracteristici și relații,
+// se recomandă folosirea export-ului JSON sau XML.
 header('Content-Type: text/csv; charset=utf-8');
-header('Content-Disposition: attachment; filename="ierbar_export.csv"');
+header('Content-Disposition: attachment; filename="ierbar_plante_' . date('Y-m-d') . '.csv"');
 
-// Creăm un flux de ieșire (output) direct în browser
 $output = fopen('php://output', 'w');
 
-// Adăugăm primul rând: Capul de tabel (numele coloanelor)
-fputcsv($output, ['ID', 'Nume Popular', 'Nume Stiintific', 'Origine', 'Statut', 'Metoda Inmultire']);
+// Antet coloane
+fputcsv($output, ['ID', 'User ID', 'Nume Popular', 'Nume Științific', 'Descriere', 'Origine', 'Tip Sol', 'Statut', 'Metodă Înmulțire']);
 
 try {
-    // Luăm plantele din baza de date
-    $stmt = $pdo->query("SELECT id, common_name, scientific_name, origin, status, propagation_method FROM plants");
+    $stmt = $pdo->query("SELECT id, user_id, common_name, scientific_name, description, origin, soil, status, propagation_method FROM plants");
 
-    // Parcurgem fiecare rând din baza de date
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // fputcsv transformă automat array-ul într-un rând cu virgule
         fputcsv($output, $row);
     }
 } catch (\PDOException $e) {
-    // Dacă apare o eroare, o scriem în fișier pentru a o putea citi
-    fputcsv($output, ['Eroare la export: ' . $e->getMessage()]);
+    fputcsv($output, ['EROARE: ' . $e->getMessage()]);
 }
 
 fclose($output);
