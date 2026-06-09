@@ -26,6 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.className = 'plant-card';
                     const imagePath = plant.file_path ? plant.file_path : 'https://placehold.co/400x300/e0e0e0/666666?text=Fara+Poza';
 
+                    let actionButtons = '';
+                    if (plant.user_id == currentUserId || currentUserRole === 'admin') {
+                        actionButtons = `
+                            <button onclick="editPlant(${plant.id})" style="background-color: #2e7d32; margin-top: 5px;">Editează</button>
+                            <button onclick="deletePlant(${plant.id})" style="background-color: #d32f2f; margin-top: 5px;">Șterge</button>
+                        `;
+                    }
+
                     card.innerHTML = `
                         <img src="${imagePath}" alt="${plant.common_name}" class="plant-image">
                         <h4>${plant.common_name}</h4>
