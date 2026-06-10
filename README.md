@@ -67,11 +67,10 @@ Aplicație web colaborativă PHP/MySQL pentru gestionarea unei colecții digital
 - protecție minimă SQL injection prin PDO prepared statements
 - protecție minimă XSS prin `htmlspecialchars()` la afișarea datelor
 
-## Detalii export/import
+## Demonstrație Video
 
-- **Export/import CSV**: acoperă acum structura completă a ierbarului, incluzând plantele, media, caracteristicile, asocierile plantă-caracteristică și relațiile între specii. Formatul CSV este organizat pe secțiuni pentru a putea fi re-importat corect.
-- **Export/import JSON și XML**: includ, de asemenea, structura completă a ierbarului cu plante, media, caracteristici și relații între specii.
-- Nu există încă un mecanism complet de traducere multilingvă pentru descrieri.
+Puteți vizualiza o prezentare rapidă a funcționalităților proiectului rulând link-ul de mai jos:
+[Vezi Demonstrația Video pe Google Drive](https://drive.google.com/file/d/17n9ksi65gt-69qw5KY23VtfxA94Ad3Ny/view?usp=sharing)
 
 ## Structura proiectului
 
